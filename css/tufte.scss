@@ -43,13 +43,22 @@ body, p, li, td, span, div {
     line-height: 1.8;  /* 줄 간격을 넓혀서 읽기 편하게 */
 }
 
-/* 배경색 유지 (시험지 색상) */
+/* --- 배경 디자인: 직접 올린 이미지 --- */
 body {
-    background-color: #f4f1e8 !important; /* 이미지가 로딩되기 전 보일 색 */
-    /* 아래 주소에 원하는 이미지 주소를 넣으세요 */
-    background-image: url('https://i.pinimg.com/736x/62/8a/da/628adafb4941ea219befaffd3530530f.jpg'); 
-    background-repeat: repeat; /* 이미지를 바둑판처럼 반복 */
-    color: #222 !important;
+    /* 혹시 이미지가 안 뜰 때를 대비한 기본 배경색 */
+    background-color: #f4f1e8 !important;
+    
+    /* [핵심] 여기에 아까 올린 파일명을 정확히 적어주세요! */
+    /* ../ 는 '상위 폴더로 이동'이라는 뜻입니다 (css 폴더에서 나가서 assets 폴더의 이미지를 찾음) */
+    background-image: url('../background_image.jpg');
+    
+    /* 이미지가 반복되게 설정 (타일처럼 깔림) */
+    background-repeat: repeat;
+    
+    /* (선택) 이미지가 너무 크거나 작으면 사이즈 조절 */
+    /* background-size: 500px auto;  <- 필요하면 주석 풀고 숫자 조절 */
+    
+    color: #333 !important;
 }
 
 // Imports to create final
