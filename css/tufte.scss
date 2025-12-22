@@ -43,25 +43,25 @@ body, p, li, td, span, div {
     line-height: 1.8;  /* 줄 간격을 넓혀서 읽기 편하게 */
 }
 
-/* --- 배경 디자인: 화면 꽉 채우는 풀스크린 이미지 --- */
 body {
-    background-color: #f4f1e8 !important; /* 이미지 로딩 전 배경색 */
-    
-    /* 1. 이미지 경로 (파일 이름 꼭 확인하세요!) */
+    /* 1. 종이 밖 배경색 (책상 색깔 - 연한 회색 추천) */
+    background-color: #e0e0e0 !important;
+
+    /* 2. 이미지 경로 (파일 이름 확인!) */
     background-image: url('../assets/img/background_image.jpg');
-    
-    /* 2. 반복하지 않음 (이미지 하나만 씀) */
+
+    /* 3. 반복하지 않음 */
     background-repeat: no-repeat;
-    
-    /* 3. [핵심] 화면 꽉 채우기 (비율 유지하면서 빈 공간 없이 늘림) */
-    background-size: cover;
-    
-    /* 4. 이미지 위치를 중앙으로 */
-    background-position: center center;
-    
-    /* 5. 스크롤 내려도 배경은 고정 (선택사항 - 이게 있으면 더 멋짐) */
+
+    /* 4. [핵심] 화면의 95%만 채우기 (5%는 여백으로 남김) */
+    background-size: 95% auto;
+
+    /* 5. 종이를 화면 중앙 상단에 배치 */
+    background-position: top center;
+
+    /* 6. 스크롤 내려도 종이는 고정 (글자만 위로 올라감) */
     background-attachment: fixed;
-    
+
     color: #333 !important;
 }
 
