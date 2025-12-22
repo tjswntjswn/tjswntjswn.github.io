@@ -50,7 +50,7 @@ body {
     
     /* [핵심] 여기에 아까 올린 파일명을 정확히 적어주세요! */
     /* ../ 는 '상위 폴더로 이동'이라는 뜻입니다 (css 폴더에서 나가서 assets 폴더의 이미지를 찾음) */
-    background-image: url('../background_image.jpg');
+    background-image: url('../assets/img/background_image.jpg');
     
     /* 이미지가 반복되게 설정 (타일처럼 깔림) */
     background-repeat: repeat;
