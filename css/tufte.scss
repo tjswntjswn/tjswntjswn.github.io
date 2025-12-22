@@ -43,20 +43,24 @@ body, p, li, td, span, div {
     line-height: 1.8;  /* 줄 간격을 넓혀서 읽기 편하게 */
 }
 
-/* --- 배경 디자인: 직접 올린 이미지 --- */
+/* --- 배경 디자인: 화면 꽉 채우는 풀스크린 이미지 --- */
 body {
-    /* 혹시 이미지가 안 뜰 때를 대비한 기본 배경색 */
-    background-color: #f4f1e8 !important;
+    background-color: #f4f1e8 !important; /* 이미지 로딩 전 배경색 */
     
-    /* [핵심] 여기에 아까 올린 파일명을 정확히 적어주세요! */
-    /* ../ 는 '상위 폴더로 이동'이라는 뜻입니다 (css 폴더에서 나가서 assets 폴더의 이미지를 찾음) */
+    /* 1. 이미지 경로 (파일 이름 꼭 확인하세요!) */
     background-image: url('../assets/img/background_image.jpg');
     
-    /* 이미지가 반복되게 설정 (타일처럼 깔림) */
-    background-repeat: repeat;
+    /* 2. 반복하지 않음 (이미지 하나만 씀) */
+    background-repeat: no-repeat;
     
-    /* (선택) 이미지가 너무 크거나 작으면 사이즈 조절 */
-    /* background-size: 500px auto;  <- 필요하면 주석 풀고 숫자 조절 */
+    /* 3. [핵심] 화면 꽉 채우기 (비율 유지하면서 빈 공간 없이 늘림) */
+    background-size: cover;
+    
+    /* 4. 이미지 위치를 중앙으로 */
+    background-position: center center;
+    
+    /* 5. 스크롤 내려도 배경은 고정 (선택사항 - 이게 있으면 더 멋짐) */
+    background-attachment: fixed;
     
     color: #333 !important;
 }
