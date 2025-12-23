@@ -6,187 +6,140 @@
   <title>{{ page.title | default: site.title }}</title>
   
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap" rel="stylesheet">
   
   <link rel="stylesheet" href="{{ '/assets/css/tufte.css' | relative_url }}">
 
   <style>
-    /* [핵심] Tufte 테마의 좁은 레이아웃 강제 해제 */
-    body {
-      width: 100% !important;
-      max-width: 100% !important;
-      padding: 0 !important;
-      margin: 0 !important;
-      background-color: #fcf4e8; /* 배경색 */
+    /* [강제 초기화] Tufte 테마 스타일 무시 */
+    body, html {
+      margin: 0 !important; padding: 0 !important;
+      width: 100% !important; height: 100% !important;
+      font-family: 'Noto Sans KR', sans-serif !important;
+      background-color: #fcf4e8 !important; /* 배경색 */
       display: block !important;
     }
     
-    /* 본문 글자 폭 제한 해제 (Tufte는 글자 폭을 좁게 잡음) */
-    article, p, h1, h2, h3, ul, ol, div {
-      width: 100% !important;
-      max-width: 100% !important;
-      margin-left: 0 !important;
-      margin-right: 0 !important;
-      box-sizing: border-box;
-    }
-
-    /* --------------------------------------------------- */
-    /* [레이아웃] 2단 구조 (사이드바 + 메인) */
-    /* --------------------------------------------------- */
-    .blog-wrapper {
-      display: flex; /* 좌우 배치 핵심 */
-      max-width: 1400px;
-      margin: 0 auto;
-      min-height: 100vh;
-      align-items: flex-start; /* 위쪽 정렬 */
-    }
-
-    /* [왼쪽] 사이드바 스타일 */
-    .sidebar {
-      width: 280px; /* 사이드바 고정 너비 */
-      padding: 50px 30px;
-      flex-shrink: 0; /* 폭 줄어듦 방지 */
-      border-right: 1px solid rgba(0,0,0,0.1); /* 구분선 */
+    /* [전체 레이아웃] 좌측 사이드바 + 우측 본문 */
+    .layout-wrapper {
       display: flex;
-      flex-direction: column;
-      gap: 40px;
-      height: 100%; /* 전체 높이 */
+      max-width: 1600px; margin: 0 auto; min-height: 100vh;
     }
 
-    /* 프로필 영역 */
+    /* [왼쪽] 사이드바 */
+    .sidebar {
+      width: 280px; padding: 40px 30px;
+      border-right: 1px solid rgba(0,0,0,0.1);
+      flex-shrink: 0;
+      display: flex; flex-direction: column; gap: 30px;
+      background-color: #fcf4e8;
+    }
+    
+    /* 프로필 */
     .profile-area { text-align: center; }
     .profile-img {
-      width: 120px; height: 120px;
-      border-radius: 50%;
-      background-color: #ccc;
-      margin: 0 auto 15px;
-      /* 프로필 이미지 URL 변경 필요 */
-      background-image: url('https://github.com/tjswntjswn.png'); 
+      width: 120px; height: 120px; border-radius: 50%;
+      background-color: #ddd; margin: 0 auto 15px;
+      background-image: url('https://github.com/{{ site.github_username }}.png');
       background-size: cover; background-position: center;
     }
-    .blog-title { font-size: 1.2rem; font-weight: bold; color: #222; margin-bottom: 5px; }
+    .blog-title { font-size: 1.3rem; font-weight: bold; color: #333; margin-bottom: 5px; }
     .blog-desc { font-size: 0.9rem; color: #666; }
 
-    /* 메뉴 영역 */
+    /* 메뉴(카테고리) */
     .menu-area h3 {
-      font-size: 1rem; border-bottom: 2px solid #333;
-      padding-bottom: 8px; margin-bottom: 15px;
-      font-family: sans-serif;
+      font-size: 1.1rem; border-bottom: 2px solid #333;
+      padding-bottom: 5px; margin-bottom: 15px; color: #222; text-align: left;
     }
     .menu-list { list-style: none; padding: 0; margin: 0; text-align: left; }
-    .menu-list li { margin-bottom: 10px; }
-    .menu-list a {
-      text-decoration: none; color: #555; font-size: 0.95rem;
-      background: none !important; /* Tufte 밑줄 제거 */
-      text-shadow: none !important;
-      transition: color 0.2s;
-    }
+    .menu-list li { margin-bottom: 8px; }
+    .menu-list a { text-decoration: none; color: #555; display: block; font-size: 1rem; }
     .menu-list a:hover { color: #000; font-weight: bold; }
 
-
-    /* [오른쪽] 메인 콘텐츠 스타일 */
+    /* [오른쪽] 본문 */
     .main-content {
-      flex: 1; /* 남은 공간 다 차지 */
-      padding: 60px 50px;
-      display: flex;
-      flex-direction: column;
-      min-width: 0; /* 내용 넘침 방지 */
+      flex: 1; padding: 60px;
+      display: flex; flex-direction: column;
     }
+    
+    /* 콘텐츠 폭 제한 해제 */
+    article, p, h1, h2, ul, div, .content-body { 
+      width: 100% !important; max-width: 100% !important; 
+    }
+    img { max-width: 100%; height: auto; }
 
-    /* 반응형 (모바일) */
+    /* [푸터] 바둑판 그리드 */
+    .custom-footer {
+      margin-top: 100px; padding-top: 40px;
+      border-top: 1px solid rgba(0,0,0,0.1); text-align: center;
+    }
+    .icon-row { display: flex; justify-content: center; }
+    .icon-row.bottom { margin-top: -1px; } /* 겹치기 */
+    .icon-box {
+      width: 45px; height: 45px; border: 1px solid #333;
+      display: flex; justify-content: center; align-items: center;
+      margin-right: -1px; color: #333; text-decoration: none; font-size: 18px;
+      background: transparent !important;
+    }
+    .icon-row .icon-box:last-child { margin-right: 0; }
+    .icon-box:hover { background-color: rgba(0,0,0,0.05) !important; }
+
+    /* 모바일 반응형 */
     @media (max-width: 900px) {
-      .blog-wrapper { flex-direction: column; }
-      .sidebar { width: 100%; border-right: none; border-bottom: 1px solid #ddd; padding: 30px; box-sizing: border-box; }
+      .layout-wrapper { flex-direction: column; }
+      .sidebar { width: auto; border-right: none; border-bottom: 1px solid #ddd; }
       .main-content { padding: 30px 20px; }
     }
-
-    /* --------------------------------------------------- */
-    /* [푸터] 바둑판 그리드 (요청하신 디자인) */
-    /* --------------------------------------------------- */
-    .custom-footer {
-      margin-top: 100px; /* 본문과 거리두기 */
-      text-align: center;
-      padding-top: 40px;
-      border-top: 1px solid rgba(0,0,0,0.05);
-    }
-    .social-grid {
-      display: flex; flex-direction: column; align-items: center; margin-bottom: 20px;
-    }
-    .grid-row { display: flex; justify-content: center; }
-    .grid-row.bottom { margin-top: -1px; } /* 위로 1px 당겨서 겹치기 */
-    
-    .grid-box {
-      width: 45px; height: 45px;
-      border: 1px solid #111; /* 테두리 */
-      display: flex; justify-content: center; align-items: center;
-      margin-right: -1px; /* 옆으로 1px 당겨서 겹치기 */
-      background: none !important;
-      color: #111 !important;
-      text-decoration: none !important;
-      font-size: 18px;
-    }
-    .grid-row .grid-box:last-child { margin-right: 0; } /* 마지막은 당기기 취소 */
-    .grid-box:hover { background-color: #eee !important; }
-
-    .footer-credits { font-size: 0.9rem; color: #333; }
-    .footer-credits a { text-decoration: underline; color: #111; background: none !important; }
   </style>
 </head>
-
 <body>
 
-  <div class="blog-wrapper">
-    
-    <aside class="sidebar">
-      <div class="profile-area">
-        <div class="profile-img"></div>
-        <div class="blog-title">{{ site.title }}</div>
-        <div class="blog-desc">{{ site.description }}</div>
-      </div>
+<div class="layout-wrapper">
+  <aside class="sidebar">
+    <div class="profile-area">
+      <div class="profile-img"></div>
+      <div class="blog-title">{{ site.title }}</div>
+      <div class="blog-desc">{{ site.description }}</div>
+    </div>
+    <nav class="menu-area">
+      <h3>Category</h3>
+      <ul class="menu-list">
+        <li><a href="{{ '/' | relative_url }}">전체보기</a></li>
+        {% for category in site.categories %}
+        <li><a href="{{ category[0] | slugify | prepend: '/category/' | relative_url }}">{{ category[0] }}</a></li>
+        {% endfor %}
+      </ul>
+    </nav>
+  </aside>
 
-      <nav class="menu-area">
-        <h3>Category</h3>
-        <ul class="menu-list">
-          <li><a href="{{ '/' | relative_url }}">전체보기</a></li>
-          {% for category in site.categories %}
-          <li>
-            <a href="{{ category[0] | slugify | prepend: '/category/' | relative_url }}">
-              {{ category[0] }} 
-              <span style="color:#aaa; font-size:0.8em">({{ category[1].size }})</span>
-            </a>
-          </li>
-          {% endfor %}
-        </ul>
-      </nav>
-    </aside>
+  <main class="main-content">
+    <div class="content-body">
+      {% if page.title %}
+      <h1 style="font-size:2rem; margin-bottom:20px; border-bottom:1px solid #ccc; padding-bottom:10px;">{{ page.title }}</h1>
+      {% endif %}
 
+      {{ content }}
+    </div>
 
-    <main class="main-content">
-      
-      <div class="post-content">
-        {{ content }}
-      </div>
-
-      <footer class="custom-footer">
-        <div class="social-grid">
-          <div class="grid-row">
-            <a href="mailto:{{ site.email }}" class="grid-box"><i class="fa-regular fa-envelope"></i></a>
-            <a href="https://google.com" class="grid-box"><i class="fa-brands fa-google"></i></a>
-            <a href="https://github.com" class="grid-box"><i class="fa-brands fa-github"></i></a>
-          </div>
-          <div class="grid-row bottom">
-            <a href="#" class="grid-box"><i class="fa-brands fa-vimeo-v"></i></a>
-            <a href="#" class="grid-box"><i class="fa-brands fa-linkedin-in"></i></a>
-          </div>
+    <footer class="custom-footer">
+      <div style="display:flex; flex-direction:column; align-items:center; margin-bottom:20px;">
+        <div class="icon-row">
+          <a href="mailto:{{ site.email }}" class="icon-box"><i class="fa-regular fa-envelope"></i></a>
+          <a href="https://github.com/{{ site.github_username }}" class="icon-box"><i class="fa-brands fa-github"></i></a>
+          <a href="#" class="icon-box"><i class="fa-brands fa-twitter"></i></a>
+          <a href="#" class="icon-box"><i class="fa-brands fa-google"></i></a>
+          <a href="#" class="icon-box"><i class="fa-brands fa-flickr"></i></a>
+          <a href="#" class="icon-box"><i class="fa-solid fa-rss"></i></a>
         </div>
-        
-        <div class="footer-credits">
-          &copy; 2025 {{ site.title }}<br>
-          Powered by <a href="https://jekyllrb.com">Jekyll</a>
+        <div class="icon-row bottom">
+          <a href="#" class="icon-box"><i class="fa-brands fa-vimeo-v"></i></a>
+          <a href="#" class="icon-box"><i class="fa-brands fa-linkedin-in"></i></a>
         </div>
-      </footer>
-
-    </main>
-  </div>
+      </div>
+      <div style="font-size:0.9rem;">&copy; 2025 {{ site.title }}</div>
+    </footer>
+  </main>
+</div>
 
 </body>
 </html>
