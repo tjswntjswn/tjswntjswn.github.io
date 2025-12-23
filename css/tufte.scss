@@ -293,7 +293,7 @@ blockquote footer {  font-size: 1.1rem;
         letter-spacing: .03em; }
 
 pre, pre code, p code, p pre code { font-family: $code-font;  // removed .code 'class' since code is an actual html tag
-        font-size: 1.2rem;                   // also added p code, p pre code and pre selector to account for Markdown parsing
+        font-size: 1.2rem;                    // also added p code, p pre code and pre selector to account for Markdown parsing
         line-height: 1.71428571;        // of triple backticks plus rationalized line-heights and margins
         margin-top: 1.71428571rem; }
 
@@ -424,15 +424,15 @@ p, footer, div.table-wrapper,  .MJXc-display, .MathJax { width: 55%; }
 div.table-wrapper, table { overflow-x: auto; } //changed all overflow values to 'auto' so scroll bars appear only as needed
 
 @media screen and (max-width: 760px) { p, footer { width: 90%; }
-                                       pre code { width: 87.5%; }
-                                       ul { width: 85%; }
-                                       figure { max-width: 90%; }
-                                       figcaption, figure.fullwidth figcaption { margin-right: 0%;
+                                     pre code { width: 87.5%; }
+                                     ul { width: 85%; }
+                                     figure { max-width: 90%; }
+                                     figcaption, figure.fullwidth figcaption { margin-right: 0%;
                                                                                  max-width: none; }
-                                       blockquote p, blockquote footer, div.epigraph > blockquote > footer,.MJXc-display {  width: 80%;
-                                                                          padding-left: 5%;
-                                                                          padding-right: 5%;
-                                                                        }}
+                                     blockquote p, blockquote footer, div.epigraph > blockquote > footer,.MJXc-display {  width: 80%;
+                                                                                                  padding-left: 5%;
+                                                                                                  padding-right: 5%;
+                                                                                                 }}
 
 .marginnote code, .sidenote code { font-size: 1rem; } //more .code class removal
 
@@ -467,7 +467,7 @@ label.margin-toggle:not(.sidenote-number) { display: none; }
                                                                    position: relative; }
                             label { cursor: pointer; }
                             pre, pre code, p code, p pre code { width: 90%;
-                                       padding: 0; }
+                                     padding: 0; }
                             .table-caption { display: block;
                                              float: right;
                                              clear: both;
@@ -858,3 +858,79 @@ header > nav a:hover {
     }
 }
 /*-- End of Icomoon icon font section --*/
+
+/* ================================================= */
+/* 🍑 [NEW] 감성 다이어리 스타일 (살구색 & 박스 디자인) */
+/* ================================================= */
+
+/* 1. 배경을 따뜻한 살구색으로 변경 */
+body {
+    background-color: #ffeadd !important; /* 살구색 배경 */
+    background-image: none !important; /* 기존 종이 질감 제거 (깔끔하게) */
+}
+
+/* 2. 전체 레이아웃 너비 조정 (너무 넓지 않게) */
+.container, .wrapper, main, article {
+    max-width: 1000px !important;
+    background-color: transparent !important; /* 배경 투명하게 */
+    box-shadow: none !important; /* 그림자 제거 */
+    border: none !important; /* 테두리 제거 */
+    padding: 20px !important;
+}
+
+/* 3. 제목 스타일: 속이 빈 글씨 (Outline Text) 효과 */
+header .site-title, h1, h2 {
+    font-family: 'Nanum Myeongjo', serif !important;
+    color: transparent !important; /* 글자색 투명 */
+    -webkit-text-stroke: 1px #555 !important; /* 테두리만 진한 회색 */
+    letter-spacing: -1px !important;
+    text-align: left !important; /* 왼쪽 정렬 */
+    border: none !important; /* 기존 줄 제거 */
+    width: auto !important;
+}
+
+/* 4. 글 목록을 '카드 박스' 형태로 만들기 (핵심!) */
+ul li, article {
+    background-color: rgba(255, 255, 255, 0.4) !important; /* 반투명 흰색 박스 */
+    border: 1px solid #8c8c8c !important; /* 진한 회색 테두리 */
+    margin-bottom: 15px !important; /* 박스 사이 간격 */
+    padding: 20px !important; /* 박스 안쪽 여백 */
+    list-style: none !important; /* 점 없애기 */
+    border-radius: 0px !important; /* 각진 모서리 */
+    transition: all 0.3s ease; /* 부드러운 움직임 */
+}
+
+/* 박스에 마우스 올리면 살짝 떠오르는 효과 */
+ul li:hover, article:hover {
+    background-color: rgba(255, 255, 255, 0.9) !important;
+    transform: translateY(-3px);
+    box-shadow: 5px 5px 0px rgba(0,0,0,0.1);
+}
+
+/* 5. 링크 글자 색상 정리 */
+a {
+    color: #444 !important;
+    text-decoration: none !important; /* 밑줄 제거 */
+}
+a:hover {
+    color: #dfa67b !important; /* 마우스 올리면 살구색 포인트 */
+}
+
+/* 6. 메뉴 위치를 왼쪽으로 (참고 이미지 느낌) */
+header > nav {
+    text-align: left !important;
+    padding-left: 10px !important;
+    border-bottom: 2px solid #555 !important; /* 메뉴 아래 굵은 줄 */
+    padding-bottom: 10px !important;
+    margin-bottom: 40px !important;
+    width: 100% !important;
+}
+
+header > nav a {
+    font-size: 1.1rem !important;
+    margin-left: 0 !important;
+    margin-right: 20px !important; /* 메뉴 사이 간격 */
+    font-weight: bold !important;
+    color: #555 !important;
+    background: none !important;
+}
