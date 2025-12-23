@@ -1,12 +1,39 @@
 <!DOCTYPE html>
 <html>
+  <head>
   {% include head.html %}
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  </head>
   <body>
-    {% include header.html %}
-    <article class="group">
-      {{ content }}
-    </article>
-    {% include print-footer.html %}
-    {% include footer.html %}
+    <div class="layout-wrapper">
+      
+      <aside class="sidebar">
+        <div class="profile-section">
+          <div class="profile-img-box">
+             <img src="{{ "/assets/img/profile.jpg" | prepend: site.baseurl }}" alt="Profile" onerror="this.src='https://via.placeholder.com/150'">
+          </div>
+          
+          <h2 class="sidebar-title">{{ site.title }}</h2>
+          <p class="sidebar-desc">{{ site.description }}</p>
+        </div>
+
+        <hr class="sidebar-divider">
+
+        <nav class="sidebar-menu">
+          <h3>Category</h3>
+          <ul>
+            <li><a href="{{ "/" | prepend: site.baseurl }}">전체보기 (Home)</a></li>
+            <li><a href="{{ "/about" | prepend: site.baseurl }}">소개 (About)</a></li>
+            <li><a href="#">일상 (Daily)</a></li>
+            <li><a href="#">공부 (Study)</a></li>
+          </ul>
+        </nav>
+      </aside>
+
+      <main class="content-area">
+        {{ content }}
+      </main>
+
+    </div> {% include footer.html %}
   </body>
 </html>
