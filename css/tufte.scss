@@ -805,19 +805,33 @@ header > nav.group {
     padding-bottom: 40px !important; /* 본문과의 간격 */
 }
 
-/* 메뉴 글씨 스타일 (손글씨 느낌) */
+header > nav a img,
+header nav img,
+.badge,
+img.badge,
+a.badge {
+    display: none !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+    width: 0 !important;
+    height: 0 !important;
+}
+
+/* 2. 로고가 사라진 자리 정리 (메뉴 위치 다시 잡기) */
+header > nav {
+    width: 100% !important;
+    text-align: right !important; /* 메뉴 오른쪽 정렬 */
+    padding-top: 10px !important;
+}
+
+/* 3. 메뉴 글씨 스타일 (시험지 수험번호 칸 느낌) */
 header > nav a {
     display: inline-block !important;
     float: none !important;
-    font-family: 'AbiWiseLife', sans-serif !important; /* 귀여운 손글씨 폰트 */
+    font-family: 'AbiWiseLife', sans-serif !important; /* 손글씨 */
     font-size: 1.3rem !important;
-    color: #444 !important; /* 차분한 회색 */
     margin-left: 20px !important;
-    margin-right: 0 !important;
-    padding: 0 !important;
-    letter-spacing: 0 !important;
-    text-transform: none !important; /* 대문자 강제 변환 해제 */
-    text-decoration: none !important;
+    color: #555 !important;
     background: none !important; /* 배경색 제거 */
 }
 
