@@ -1,115 +1,257 @@
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ site.title }}</title>
+  
+  <link rel="stylesheet" href="{{ '/assets/css/tufte.css' | relative_url }}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-<style>
-    /* [Tufte 테마 강제 리셋 및 스타일 정의] 
-       .force-clean-footer 클래스 내부는 Tufte CSS의 영향을 받지 않도록 강력하게 선언합니다.
-    */
+  <style>
+    /* [레이아웃 전체 재설계: 티스토리 스타일] */
     
-    .force-clean-footer {
+    /* 1. Tufte 테마의 강제 중앙 정렬과 너비 제한 해제 */
+    body {
+      padding: 0 !important;
+      margin: 0 !important;
+      max-width: 100% !important;
+      width: 100% !important;
+      background-color: #fcf4e8; /* 샘플 사이트와 비슷한 살구색 배경 */
+      font-family: inherit; /* 사용자가 설정한 폰트 유지 */
+    }
+
+    /* 2. 전체를 감싸는 컨테이너 (좌우 분할용) */
+    .blog-container {
+      display: flex;
+      max-width: 1400px; /* 너무 넓어지지 않게 제한 */
+      margin: 0 auto;    /* 가운데 정렬 */
+      min-height: 100vh;
+    }
+
+    /* [왼쪽] 사이드바 영역 */
+    .sidebar {
+      width: 280px;         /* 너비 고정 */
+      padding: 40px 30px;
+      flex-shrink: 0;       /* 화면 줄어들 때 찌그러짐 방지 */
+      border-right: 1px solid rgba(0,0,0,0.1); /* 본문과 구분선 */
+      display: flex;
+      flex-direction: column;
+      gap: 40px;            /* 요소 사이 간격 */
+      text-align: left;     /* 텍스트 왼쪽 정렬 (티스토리 샘플 반영) */
+    }
+
+    /* 프로필 영역 */
+    .profile-box {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .profile-img {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%; /* 둥근 사진 */
+      background-color: #ddd;
+      margin: 0 auto 15px;
+      background-size: cover;
+      background-position: center;
+      /* 프로필 이미지 경로가 있다면 아래에 넣으세요 */
+      background-image: url('{{ site.url }}/assets/img/profile.jpg'); 
+    }
+    .blog-name {
+      font-size: 1.2rem;
+      font-weight: bold;
+      margin-bottom: 5px;
+      color: #333;
+    }
+    .blog-desc {
+      font-size: 0.9rem;
+      color: #777;
+    }
+
+    /* 메뉴 및 카테고리 스타일 (샘플처럼 밑줄 디자인) */
+    .menu-box h3, .category-box h3 {
+      font-size: 1.1rem;
+      font-weight: bold;
+      border-bottom: 2px solid #333; /* 제목 밑 굵은 선 */
+      padding-bottom: 8px;
+      margin-bottom: 15px;
+      color: #333;
+    }
+    
+    .sidebar-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .sidebar-list li {
+      margin-bottom: 8px;
+    }
+    .sidebar-list a {
+      text-decoration: none;
+      color: #666;
+      font-size: 0.95rem;
+      background: none !important; /* Tufte 링크 스타일 제거 */
+      text-shadow: none !important;
+      transition: color 0.2s;
+    }
+    .sidebar-list a:hover {
+      color: #000;
+      font-weight: bold;
+    }
+
+    /* [오른쪽] 메인 콘텐츠 영역 */
+    .main-content {
+      flex: 1; /* 남은 공간 모두 차지 */
+      padding: 60px 50px;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    /* 콘텐츠 내부 스타일 조정 */
+    .main-content h1, .main-content h2, .main-content p {
+      max-width: 100% !important; /* 글자 폭 제한 해제 */
+    }
+
+    /* [반응형] 모바일에서는 위아래로 배치 */
+    @media (max-width: 900px) {
+      .blog-container {
+        flex-direction: column;
+      }
+      .sidebar {
         width: 100%;
-        padding: 4rem 1rem; /* 넉넉한 여백 */
-        text-align: center;
-        /* 혹시 모를 배경색 간섭 제거 */
-        background: transparent; 
+        border-right: none;
+        border-bottom: 1px solid #ddd;
+        padding: 20px;
+        box-sizing: border-box;
+      }
+      .main-content {
+        padding: 30px 20px;
+      }
     }
 
-    /* 1. 아이콘 전체 래퍼 (세로 정렬) */
-    .social-grid-wrapper {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 12px; /* 윗줄과 아랫줄 사이 간격 (절대 안 겹침) */
-        margin-bottom: 3rem;
-    }
-
-    /* 2. 아이콘 한 줄 (가로 정렬) */
-    .icon-row {
-        display: flex;
-        justify-content: center;
-        /* 줄바꿈 방지 */
-        flex-wrap: nowrap; 
-    }
-
-    /* 3. 개별 아이콘 박스 (Tufte 링크 스타일 제거 핵심) */
-    .force-clean-footer a.social-box {
-        /* [중요] Tufte의 그라데이션 밑줄 제거 */
-        background: none !important; 
-        background-image: none !important; 
-        text-shadow: none !important;
-        text-decoration: none !important;
-        border-bottom: none !important;
-
-        /* 박스 디자인 */
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        width: 45px;
-        height: 45px;
-        border: 1px solid #111; /* 선명한 테두리 */
-        color: #111 !important; /* 글자색 강제 지정 */
-        
-        /* 옆 박스와 테두리 겹치기 (깔끔한 연결) */
-        margin-right: -1px;
-        
-        font-size: 18px;
-        line-height: 1;
-        transition: background-color 0.2s;
-    }
-
-    /* 맨 오른쪽 아이콘 마진 정리 */
-    .icon-row a.social-box:last-child {
-        margin-right: 0;
-    }
-
-    /* 호버 효과 */
-    .force-clean-footer a.social-box:hover {
-        background-color: rgba(0,0,0,0.05) !important;
-    }
-
-    /* 4. 하단 텍스트 영역 */
-    .footer-credits {
-        font-size: 1rem;
-        line-height: 1.5;
-        color: #111;
-        display: flex;
-        flex-direction: column;
-        gap: 0.5rem;
+    /* ---------------------------------------------------- */
+    /* [푸터 스타일] 아까 만든 '바둑판' 디자인 그대로 적용 */
+    /* ---------------------------------------------------- */
+    .custom-footer {
+      margin-top: auto; /* 콘텐츠가 짧아도 바닥에 붙게 */
+      padding-top: 80px;
+      text-align: center;
     }
     
-    /* 하단 링크만 Tufte 스타일 유지 or 심플하게 밑줄 */
-    .footer-credits a {
-        color: inherit;
-        text-decoration: underline;
-        text-underline-offset: 3px;
-        background: none; /* 텍스트 링크에도 그라데이션 제거 (깔끔하게) */
+    .social-grid-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 30px;
     }
-</style>
-
-<footer class="force-clean-footer">
+    .grid-row {
+      display: flex;
+      justify-content: center;
+    }
+    .grid-row.bottom-row {
+      margin-top: -1px; /* 윗줄 테두리와 겹치기 */
+    }
+    .grid-box {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 45px;
+      height: 45px;
+      border: 1px solid #111;
+      margin-right: -1px; /* 옆 박스와 테두리 겹치기 */
+      color: #111;
+      background: none !important;
+      text-decoration: none !important;
+      text-shadow: none !important;
+    }
+    .grid-row .grid-box:last-child {
+      margin-right: 0;
+    }
+    .grid-box i { font-size: 18px; }
+    .grid-box:hover { background-color: #eee !important; }
     
-    <div class="social-grid-wrapper">
-        <div class="icon-row">
-            <a href="#" class="social-box"><i class="fa-regular fa-envelope"></i></a>
-            <a href="#" class="social-box"><i class="fa-brands fa-twitter"></i></a>
-            <a href="#" class="social-box"><i class="fa-brands fa-google"></i></a>
-            <a href="#" class="social-box"><i class="fa-brands fa-github"></i></a>
-            <a href="#" class="social-box"><i class="fa-brands fa-flickr"></i></a>
-            <a href="#" class="social-box"><i class="fa-solid fa-rss"></i></a>
-        </div>
-        
-        <div class="icon-row">
-            <a href="#" class="social-box"><i class="fa-brands fa-vimeo-v"></i></a>
-            <a href="#" class="social-box"><i class="fa-brands fa-linkedin-in"></i></a>
-        </div>
-    </div>
+    .footer-text {
+      font-size: 0.9rem;
+      line-height: 1.5;
+    }
+    .footer-text a {
+      color: #111;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      background: none !important;
+    }
+  </style>
+</head>
+<body>
 
-    <div class="footer-credits">
-        <div>
-            &copy; 2025 &nbsp; YOUR NAME
-        </div>
-        <div>
-            This site created with the <a href="#">Tufte theme for Content-centric blogging</a> in <a href="#">Jekyll</a>.
-        </div>
-    </div>
+  <div class="blog-container">
 
-</footer>
+    <aside class="sidebar">
+      
+      <div class="profile-box">
+        <div class="profile-img"></div> <div class="blog-name">{{ site.title }}</div>
+        <div class="blog-desc">{{ site.description }}</div>
+      </div>
+
+      <nav class="menu-box">
+        <h3>Menu</h3>
+        <ul class="sidebar-list">
+          <li><a href="{{ '/' | relative_url }}">홈</a></li>
+          <li><a href="{{ '/about' | relative_url }}">소개</a></li>
+          <li><a href="{{ '/archive' | relative_url }}">아카이브</a></li>
+          </ul>
+      </nav>
+
+      <div class="category-box">
+        <h3>카테고리</h3>
+        <ul class="sidebar-list">
+          <li><a href="{{ '/' | relative_url }}">분류 전체보기</a></li>
+          {% for category in site.categories %}
+            <li>
+              <a href="{{ category[0] | slugify | prepend: '/category/' | relative_url }}">
+                {{ category[0] }} 
+                <span style="font-size:0.8em; color:#999">({{ category[1].size }})</span>
+              </a>
+            </li>
+          {% endfor %}
+        </ul>
+      </div>
+
+    </aside>
+
+
+    <main class="main-content">
+      
+      <div class="content-body">
+        {{ content }}
+      </div>
+
+      <footer class="custom-footer">
+        <div class="social-grid-container">
+          <div class="grid-row">
+            <a href="mailto:email@example.com" class="grid-box"><i class="fa-regular fa-envelope"></i></a>
+            <a href="#" class="grid-box"><i class="fa-brands fa-twitter"></i></a>
+            <a href="#" class="grid-box"><i class="fa-brands fa-google"></i></a>
+            <a href="#" class="grid-box"><i class="fa-brands fa-github"></i></a>
+            <a href="#" class="grid-box"><i class="fa-brands fa-flickr"></i></a>
+            <a href="#" class="grid-box"><i class="fa-solid fa-rss"></i></a>
+          </div>
+          <div class="grid-row bottom-row">
+            <a href="#" class="grid-box"><i class="fa-brands fa-vimeo-v"></i></a>
+            <a href="#" class="grid-box"><i class="fa-brands fa-linkedin-in"></i></a>
+          </div>
+        </div>
+
+        <div class="footer-text">
+          &copy; 2025 {{ site.title }}
+          <br>
+          Powered by <a href="https://jekyllrb.com">Jekyll</a> & <a href="#">Tufte Theme</a>
+        </div>
+      </footer>
+
+    </main>
+
+  </div>
+
+</body>
+</html>
