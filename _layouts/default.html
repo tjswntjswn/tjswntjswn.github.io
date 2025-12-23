@@ -3,254 +3,189 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{{ site.title }}</title>
+  <title>{{ page.title | default: site.title }}</title>
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   
   <link rel="stylesheet" href="{{ '/assets/css/tufte.css' | relative_url }}">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
   <style>
-    /* [레이아웃 전체 재설계: 티스토리 스타일] */
-    
-    /* 1. Tufte 테마의 강제 중앙 정렬과 너비 제한 해제 */
+    /* [핵심] Tufte 테마의 좁은 레이아웃 강제 해제 */
     body {
+      width: 100% !important;
+      max-width: 100% !important;
       padding: 0 !important;
       margin: 0 !important;
-      max-width: 100% !important;
+      background-color: #fcf4e8; /* 배경색 */
+      display: block !important;
+    }
+    
+    /* 본문 글자 폭 제한 해제 (Tufte는 글자 폭을 좁게 잡음) */
+    article, p, h1, h2, h3, ul, ol, div {
       width: 100% !important;
-      background-color: #fcf4e8; /* 샘플 사이트와 비슷한 살구색 배경 */
-      font-family: inherit; /* 사용자가 설정한 폰트 유지 */
+      max-width: 100% !important;
+      margin-left: 0 !important;
+      margin-right: 0 !important;
+      box-sizing: border-box;
     }
 
-    /* 2. 전체를 감싸는 컨테이너 (좌우 분할용) */
-    .blog-container {
-      display: flex;
-      max-width: 1400px; /* 너무 넓어지지 않게 제한 */
-      margin: 0 auto;    /* 가운데 정렬 */
+    /* --------------------------------------------------- */
+    /* [레이아웃] 2단 구조 (사이드바 + 메인) */
+    /* --------------------------------------------------- */
+    .blog-wrapper {
+      display: flex; /* 좌우 배치 핵심 */
+      max-width: 1400px;
+      margin: 0 auto;
       min-height: 100vh;
+      align-items: flex-start; /* 위쪽 정렬 */
     }
 
-    /* [왼쪽] 사이드바 영역 */
+    /* [왼쪽] 사이드바 스타일 */
     .sidebar {
-      width: 280px;         /* 너비 고정 */
-      padding: 40px 30px;
-      flex-shrink: 0;       /* 화면 줄어들 때 찌그러짐 방지 */
-      border-right: 1px solid rgba(0,0,0,0.1); /* 본문과 구분선 */
+      width: 280px; /* 사이드바 고정 너비 */
+      padding: 50px 30px;
+      flex-shrink: 0; /* 폭 줄어듦 방지 */
+      border-right: 1px solid rgba(0,0,0,0.1); /* 구분선 */
       display: flex;
       flex-direction: column;
-      gap: 40px;            /* 요소 사이 간격 */
-      text-align: left;     /* 텍스트 왼쪽 정렬 (티스토리 샘플 반영) */
+      gap: 40px;
+      height: 100%; /* 전체 높이 */
     }
 
     /* 프로필 영역 */
-    .profile-box {
-      text-align: center;
-      margin-bottom: 20px;
-    }
+    .profile-area { text-align: center; }
     .profile-img {
-      width: 100px;
-      height: 100px;
-      border-radius: 50%; /* 둥근 사진 */
-      background-color: #ddd;
+      width: 120px; height: 120px;
+      border-radius: 50%;
+      background-color: #ccc;
       margin: 0 auto 15px;
-      background-size: cover;
-      background-position: center;
-      /* 프로필 이미지 경로가 있다면 아래에 넣으세요 */
-      background-image: url('{{ site.url }}/assets/img/profile.jpg'); 
+      /* 프로필 이미지 URL 변경 필요 */
+      background-image: url('https://github.com/tjswntjswn.png'); 
+      background-size: cover; background-position: center;
     }
-    .blog-name {
-      font-size: 1.2rem;
-      font-weight: bold;
-      margin-bottom: 5px;
-      color: #333;
-    }
-    .blog-desc {
-      font-size: 0.9rem;
-      color: #777;
-    }
+    .blog-title { font-size: 1.2rem; font-weight: bold; color: #222; margin-bottom: 5px; }
+    .blog-desc { font-size: 0.9rem; color: #666; }
 
-    /* 메뉴 및 카테고리 스타일 (샘플처럼 밑줄 디자인) */
-    .menu-box h3, .category-box h3 {
-      font-size: 1.1rem;
-      font-weight: bold;
-      border-bottom: 2px solid #333; /* 제목 밑 굵은 선 */
-      padding-bottom: 8px;
-      margin-bottom: 15px;
-      color: #333;
+    /* 메뉴 영역 */
+    .menu-area h3 {
+      font-size: 1rem; border-bottom: 2px solid #333;
+      padding-bottom: 8px; margin-bottom: 15px;
+      font-family: sans-serif;
     }
-    
-    .sidebar-list {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-    }
-    .sidebar-list li {
-      margin-bottom: 8px;
-    }
-    .sidebar-list a {
-      text-decoration: none;
-      color: #666;
-      font-size: 0.95rem;
-      background: none !important; /* Tufte 링크 스타일 제거 */
+    .menu-list { list-style: none; padding: 0; margin: 0; text-align: left; }
+    .menu-list li { margin-bottom: 10px; }
+    .menu-list a {
+      text-decoration: none; color: #555; font-size: 0.95rem;
+      background: none !important; /* Tufte 밑줄 제거 */
       text-shadow: none !important;
       transition: color 0.2s;
     }
-    .sidebar-list a:hover {
-      color: #000;
-      font-weight: bold;
-    }
+    .menu-list a:hover { color: #000; font-weight: bold; }
 
-    /* [오른쪽] 메인 콘텐츠 영역 */
+
+    /* [오른쪽] 메인 콘텐츠 스타일 */
     .main-content {
-      flex: 1; /* 남은 공간 모두 차지 */
+      flex: 1; /* 남은 공간 다 차지 */
       padding: 60px 50px;
       display: flex;
       flex-direction: column;
-    }
-    
-    /* 콘텐츠 내부 스타일 조정 */
-    .main-content h1, .main-content h2, .main-content p {
-      max-width: 100% !important; /* 글자 폭 제한 해제 */
+      min-width: 0; /* 내용 넘침 방지 */
     }
 
-    /* [반응형] 모바일에서는 위아래로 배치 */
+    /* 반응형 (모바일) */
     @media (max-width: 900px) {
-      .blog-container {
-        flex-direction: column;
-      }
-      .sidebar {
-        width: 100%;
-        border-right: none;
-        border-bottom: 1px solid #ddd;
-        padding: 20px;
-        box-sizing: border-box;
-      }
-      .main-content {
-        padding: 30px 20px;
-      }
+      .blog-wrapper { flex-direction: column; }
+      .sidebar { width: 100%; border-right: none; border-bottom: 1px solid #ddd; padding: 30px; box-sizing: border-box; }
+      .main-content { padding: 30px 20px; }
     }
 
-    /* ---------------------------------------------------- */
-    /* [푸터 스타일] 아까 만든 '바둑판' 디자인 그대로 적용 */
-    /* ---------------------------------------------------- */
+    /* --------------------------------------------------- */
+    /* [푸터] 바둑판 그리드 (요청하신 디자인) */
+    /* --------------------------------------------------- */
     .custom-footer {
-      margin-top: auto; /* 콘텐츠가 짧아도 바닥에 붙게 */
-      padding-top: 80px;
+      margin-top: 100px; /* 본문과 거리두기 */
       text-align: center;
+      padding-top: 40px;
+      border-top: 1px solid rgba(0,0,0,0.05);
     }
+    .social-grid {
+      display: flex; flex-direction: column; align-items: center; margin-bottom: 20px;
+    }
+    .grid-row { display: flex; justify-content: center; }
+    .grid-row.bottom { margin-top: -1px; } /* 위로 1px 당겨서 겹치기 */
     
-    .social-grid-container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      margin-bottom: 30px;
-    }
-    .grid-row {
-      display: flex;
-      justify-content: center;
-    }
-    .grid-row.bottom-row {
-      margin-top: -1px; /* 윗줄 테두리와 겹치기 */
-    }
     .grid-box {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      width: 45px;
-      height: 45px;
-      border: 1px solid #111;
-      margin-right: -1px; /* 옆 박스와 테두리 겹치기 */
-      color: #111;
+      width: 45px; height: 45px;
+      border: 1px solid #111; /* 테두리 */
+      display: flex; justify-content: center; align-items: center;
+      margin-right: -1px; /* 옆으로 1px 당겨서 겹치기 */
       background: none !important;
+      color: #111 !important;
       text-decoration: none !important;
-      text-shadow: none !important;
+      font-size: 18px;
     }
-    .grid-row .grid-box:last-child {
-      margin-right: 0;
-    }
-    .grid-box i { font-size: 18px; }
+    .grid-row .grid-box:last-child { margin-right: 0; } /* 마지막은 당기기 취소 */
     .grid-box:hover { background-color: #eee !important; }
-    
-    .footer-text {
-      font-size: 0.9rem;
-      line-height: 1.5;
-    }
-    .footer-text a {
-      color: #111;
-      text-decoration: underline;
-      text-underline-offset: 3px;
-      background: none !important;
-    }
+
+    .footer-credits { font-size: 0.9rem; color: #333; }
+    .footer-credits a { text-decoration: underline; color: #111; background: none !important; }
   </style>
 </head>
+
 <body>
 
-  <div class="blog-container">
-
+  <div class="blog-wrapper">
+    
     <aside class="sidebar">
-      
-      <div class="profile-box">
-        <div class="profile-img"></div> <div class="blog-name">{{ site.title }}</div>
+      <div class="profile-area">
+        <div class="profile-img"></div>
+        <div class="blog-title">{{ site.title }}</div>
         <div class="blog-desc">{{ site.description }}</div>
       </div>
 
-      <nav class="menu-box">
-        <h3>Menu</h3>
-        <ul class="sidebar-list">
-          <li><a href="{{ '/' | relative_url }}">홈</a></li>
-          <li><a href="{{ '/about' | relative_url }}">소개</a></li>
-          <li><a href="{{ '/archive' | relative_url }}">아카이브</a></li>
-          </ul>
-      </nav>
-
-      <div class="category-box">
-        <h3>카테고리</h3>
-        <ul class="sidebar-list">
-          <li><a href="{{ '/' | relative_url }}">분류 전체보기</a></li>
+      <nav class="menu-area">
+        <h3>Category</h3>
+        <ul class="menu-list">
+          <li><a href="{{ '/' | relative_url }}">전체보기</a></li>
           {% for category in site.categories %}
-            <li>
-              <a href="{{ category[0] | slugify | prepend: '/category/' | relative_url }}">
-                {{ category[0] }} 
-                <span style="font-size:0.8em; color:#999">({{ category[1].size }})</span>
-              </a>
-            </li>
+          <li>
+            <a href="{{ category[0] | slugify | prepend: '/category/' | relative_url }}">
+              {{ category[0] }} 
+              <span style="color:#aaa; font-size:0.8em">({{ category[1].size }})</span>
+            </a>
+          </li>
           {% endfor %}
         </ul>
-      </div>
-
+      </nav>
     </aside>
 
 
     <main class="main-content">
       
-      <div class="content-body">
+      <div class="post-content">
         {{ content }}
       </div>
 
       <footer class="custom-footer">
-        <div class="social-grid-container">
+        <div class="social-grid">
           <div class="grid-row">
-            <a href="mailto:email@example.com" class="grid-box"><i class="fa-regular fa-envelope"></i></a>
-            <a href="#" class="grid-box"><i class="fa-brands fa-twitter"></i></a>
-            <a href="#" class="grid-box"><i class="fa-brands fa-google"></i></a>
-            <a href="#" class="grid-box"><i class="fa-brands fa-github"></i></a>
-            <a href="#" class="grid-box"><i class="fa-brands fa-flickr"></i></a>
-            <a href="#" class="grid-box"><i class="fa-solid fa-rss"></i></a>
+            <a href="mailto:{{ site.email }}" class="grid-box"><i class="fa-regular fa-envelope"></i></a>
+            <a href="https://google.com" class="grid-box"><i class="fa-brands fa-google"></i></a>
+            <a href="https://github.com" class="grid-box"><i class="fa-brands fa-github"></i></a>
           </div>
-          <div class="grid-row bottom-row">
+          <div class="grid-row bottom">
             <a href="#" class="grid-box"><i class="fa-brands fa-vimeo-v"></i></a>
             <a href="#" class="grid-box"><i class="fa-brands fa-linkedin-in"></i></a>
           </div>
         </div>
-
-        <div class="footer-text">
-          &copy; 2025 {{ site.title }}
-          <br>
-          Powered by <a href="https://jekyllrb.com">Jekyll</a> & <a href="#">Tufte Theme</a>
+        
+        <div class="footer-credits">
+          &copy; 2025 {{ site.title }}<br>
+          Powered by <a href="https://jekyllrb.com">Jekyll</a>
         </div>
       </footer>
 
     </main>
-
   </div>
 
 </body>
