@@ -1,68 +1,67 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
 <style>
-    /* [푸터 전체 래퍼] */
+    /* [푸터 전체 영역] */
     footer {
         padding: 60px 20px;
         text-align: center;
-        background-color: transparent; /* 배경 투명 (body 색상 따름) */
+        background-color: transparent; 
         color: #111;
     }
 
-    /* [아이콘들을 감싸는 영역] */
+    /* [아이콘 전체를 감싸는 틀] */
     .social-wrapper {
         display: flex;
-        flex-direction: column; /* 위아래로 배치 */
+        flex-direction: column; /* 세로 배치 */
         align-items: center;    /* 가운데 정렬 */
-        margin-bottom: 40px;    /* 텍스트와 간격 */
+        gap: 15px;              /* ★핵심: 윗줄과 아랫줄 사이를 확실히 띄움 (겹침 방지) */
+        margin-bottom: 45px;
     }
 
-    /* [아이콘 한 줄 (가로)] */
+    /* [한 줄 (Row)] */
     .icon-row {
         display: flex;
         justify-content: center;
+        /* flex-wrap: wrap; 필요 시 줄바꿈 허용 */
     }
 
-    /* [두 번째 줄이 첫 번째 줄 바로 밑에 붙도록 설정] */
-    .icon-row + .icon-row {
-        margin-top: -1px; /* 윗줄 테두리와 겹치게 */
-    }
-
-    /* [개별 아이콘 박스 스타일] */
+    /* [개별 아이콘 박스] */
     .social-icon {
         display: flex;
         justify-content: center;
         align-items: center;
         width: 45px;
         height: 45px;
-        border: 1px solid #111; /* 검은색 테두리 */
+        border: 1px solid #111; /* 테두리 */
         color: #111;
         text-decoration: none;
         font-size: 18px;
         
-        /* 테두리를 서로 겹치게 하여 깔끔하게 연결 (바둑판 모양) */
+        /* 옆에 있는 아이콘과 테두리를 겹쳐서 깔끔하게 보이게 함 */
         margin-right: -1px; 
+        background-color: transparent; /* 배경 투명 */
+        transition: background-color 0.2s;
     }
 
-    /* 각 줄의 마지막 아이콘은 오른쪽 마진 리셋 (선택 사항) */
+    /* 줄의 맨 마지막 아이콘은 오른쪽 마진을 0으로 (더 이상 겹칠 게 없으므로) */
     .icon-row .social-icon:last-child {
         margin-right: 0;
     }
 
     .social-icon:hover {
-        background-color: #f0f0f0;
+        background-color: rgba(0,0,0,0.05); /* 마우스 올렸을 때 살짝 어둡게 */
     }
 
     /* [하단 텍스트 영역] */
     .footer-text {
         font-size: 1.0rem;
         line-height: 1.6;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
     }
 
-    .copyright {
-        margin-bottom: 15px;
-    }
-
+    /* 링크 밑줄 스타일 */
     .credits a {
         color: inherit;
         text-decoration: underline;
@@ -80,6 +79,7 @@
             <a href="#" class="social-icon"><i class="fa-brands fa-flickr"></i></a>
             <a href="#" class="social-icon"><i class="fa-solid fa-rss"></i></a>
         </div>
+        
         <div class="icon-row">
             <a href="#" class="social-icon"><i class="fa-brands fa-vimeo-v"></i></a>
             <a href="#" class="social-icon"><i class="fa-brands fa-linkedin-in"></i></a>
