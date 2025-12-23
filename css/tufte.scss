@@ -764,4 +764,83 @@ hr.slender {
 .icon-html-five:before {
   content: "\eae4";
 }
+
+/* 1. 촌스러운 TJ 로고(원형 이미지) 아예 삭제 */
+.site-title .logo {
+    display: none !important;
+}
+
+/* 2. 블로그 제목을 '시험지 과목명'처럼 중앙에 굵게 배치 */
+header .site-title {
+    display: block !important;
+    float: none !important; /* 왼쪽 정렬 해제 */
+    text-align: center !important; /* 중앙 정렬 */
+    
+    font-family: 'Nanum Myeongjo', 'Batang', serif !important; /* 명조체 */
+    font-size: 3rem !important; /* 글씨 아주 크게 */
+    font-weight: 900 !important; /* 아주 굵게 */
+    color: #000 !important; /* 진한 검정 */
+    
+    margin: 30px auto 10px auto !important; /* 위아래 여백 */
+    padding: 15px 0 !important;
+    
+    /* 시험지 머리말 느낌의 테두리 장식 */
+    border-top: 4px solid #000 !important; 
+    border-bottom: 1px solid #000 !important;
+    letter-spacing: 0.5rem !important; /* 자간을 넓혀서 '언 어 영 역' 느낌 */
+    line-height: 1.2 !important;
+    width: 95% !important; /* 전체 폭 사용 */
+    max-width: 1200px !important;
+}
+
+/* 3. 메뉴(About, Page 등)를 우측 상단 '수험번호/성명' 칸처럼 변경 */
+header > nav.group {
+    display: block !important;
+    float: none !important;
+    width: 95% !important;
+    max-width: 1200px !important;
+    margin: 0 auto !important;
+    text-align: right !important; /* 오른쪽 정렬 */
+    padding-top: 10px !important;
+    padding-bottom: 40px !important; /* 본문과의 간격 */
+}
+
+/* 메뉴 글씨 스타일 (손글씨 느낌) */
+header > nav a {
+    display: inline-block !important;
+    float: none !important;
+    font-family: 'AbiWiseLife', sans-serif !important; /* 귀여운 손글씨 폰트 */
+    font-size: 1.3rem !important;
+    color: #444 !important; /* 차분한 회색 */
+    margin-left: 20px !important;
+    margin-right: 0 !important;
+    padding: 0 !important;
+    letter-spacing: 0 !important;
+    text-transform: none !important; /* 대문자 강제 변환 해제 */
+    text-decoration: none !important;
+    background: none !important; /* 배경색 제거 */
+}
+
+/* 메뉴에 마우스 올렸을 때 밑줄 쫙 */
+header > nav a:hover {
+    color: #000 !important;
+    text-decoration: underline !important;
+    text-decoration-style: wavy !important; /* 물결 밑줄 (지원하는 브라우저에서만 보임) */
+    text-underline-offset: 5px !important;
+}
+
+/* 모바일 화면에서 메뉴가 깨지지 않게 조정 */
+@media screen and (max-width: 760px) {
+    header .site-title {
+        font-size: 2rem !important; /* 모바일에서는 제목 크기 줄임 */
+        letter-spacing: 0.2rem !important;
+    }
+    header > nav.group {
+        text-align: center !important; /* 모바일에서는 메뉴도 중앙 정렬 */
+        padding-bottom: 20px !important;
+    }
+    header > nav a {
+        margin: 0 10px !important;
+    }
+}
 /*-- End of Icomoon icon font section --*/
