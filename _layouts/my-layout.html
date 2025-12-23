@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ page.title | default: site.title }}</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="{{ '/assets/css/tufte.css' | relative_url }}">
+  <style>
+    body {
+      width: 100% !important; max-width: 100% !important;
+      padding: 0 !important; margin: 0 !important;
+      background-color: #fcf4e8; display: block !important;
+    }
+    .blog-wrapper {
+      display: flex; max-width: 1400px; margin: 0 auto; min-height: 100vh;
+    }
+    .sidebar {
+      width: 280px; padding: 50px 30px; flex-shrink: 0;
+      border-right: 1px solid rgba(0,0,0,0.1);
+      display: flex; flex-direction: column; gap: 40px;
+    }
+    .main-content {
+      flex: 1; padding: 60px 50px; display: flex; flex-direction: column;
+    }
+    /* 반응형 */
+    @media (max-width: 900px) {
+      .blog-wrapper { flex-direction: column; }
+      .sidebar { width: 100%; border-right: none; border-bottom: 1px solid #ddd; }
+    }
+    /* 푸터 스타일 */
+    .custom-footer { margin-top: 100px; text-align: center; padding-top: 40px; border-top: 1px solid rgba(0,0,0,0.05); }
+    .grid-box {
+      width: 45px; height: 45px; border: 1px solid #111;
+      display: flex; justify-content: center; align-items: center;
+      margin-right: -1px; background: none !important; color: #111 !important; text-decoration: none !important;
+    }
+    .grid-row { display: flex; justify-content: center; }
+    .grid-row.bottom { margin-top: -1px; }
+    .grid-row .grid-box:last-child { margin-right: 0; }
+    
+    /* 기존 Tufte 스타일 무력화 */
+    article, p, h1, h2, ul, div { width: 100% !important; max-width: 100% !important; }
+  </style>
+</head>
+<body>
+  <div class="blog-wrapper">
+    <aside class="sidebar">
+      <div style="text-align:center;">
+        <div style="width:100px; height:100px; border-radius:50%; background:#ccc; margin:0 auto 15px; background-image:url('https://github.com/{{ site.github_username }}.png'); background-size:cover;"></div>
+        <div style="font-weight:bold; font-size:1.2rem;">{{ site.title }}</div>
+      </div>
+      <div>
+        <h3 style="border-bottom:2px solid #333; padding-bottom:5px;">Category</h3>
+        <ul style="list-style:none; padding:0;">
+          <li><a href="{{ '/' | relative_url }}" style="text-decoration:none; color:#555;">전체보기</a></li>
+          {% for category in site.categories %}
+          <li><a href="{{ category[0] | slugify | prepend: '/category/' | relative_url }}" style="text-decoration:none; color:#555;">{{ category[0] }}</a></li>
+          {% endfor %}
+        </ul>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <div>{{ content }}</div>
+      
+      <footer class="custom-footer">
+        <div style="display:flex; flex-direction:column; align-items:center;">
+          <div class="grid-row">
+            <a href="#" class="grid-box"><i class="fa-regular fa-envelope"></i></a>
+            <a href="#" class="grid-box"><i class="fa-brands fa-github"></i></a>
+            <a href="#" class="grid-box"><i class="fa-brands fa-google"></i></a>
+            <a href="#" class="grid-box"><i class="fa-brands fa-twitter"></i></a>
+            <a href="#" class="grid-box"><i class="fa-brands fa-flickr"></i></a>
+            <a href="#" class="grid-box"><i class="fa-solid fa-rss"></i></a>
+          </div>
+          <div class="grid-row bottom">
+            <a href="#" class="grid-box"><i class="fa-brands fa-vimeo-v"></i></a>
+            <a href="#" class="grid-box"><i class="fa-brands fa-linkedin-in"></i></a>
+          </div>
+        </div>
+        <div style="margin-top:10px; font-size:0.9rem;">&copy; 2025 {{ site.title }}</div>
+      </footer>
+    </main>
+  </div>
+</body>
+</html>
