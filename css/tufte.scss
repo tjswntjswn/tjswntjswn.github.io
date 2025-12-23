@@ -934,3 +934,113 @@ header > nav a {
     color: #555 !important;
     background: none !important;
 }
+
+/* ================================================= */
+/* 🛠️ [HTML 변경 대응] 2단 레이아웃 디자인 (사이드바 + 본문) */
+/* ================================================= */
+
+/* 1. 전체 레이아웃 (왼쪽 사이드바, 오른쪽 본문 나란히 배치) */
+.layout-wrapper {
+    display: flex;
+    max-width: 1200px;
+    margin: 0 auto;
+    gap: 40px; /* 사이드바와 본문 사이 간격 */
+    padding: 40px 20px;
+}
+
+/* 2. [왼쪽] 사이드바 디자인 */
+.sidebar {
+    width: 280px; /* 사이드바 고정 너비 */
+    flex-shrink: 0; /* 화면이 줄어도 찌그러지지 않게 */
+    text-align: center;
+    background-color: rgba(255,255,255,0.5); /* 반투명 배경 */
+    border: 1px solid #8c8c8c;
+    padding: 30px 20px;
+    height: fit-content; /* 내용만큼만 높이 잡기 */
+    /* position: sticky; top: 20px; */ /* 스크롤 따라오게 하려면 주석 해제 */
+}
+
+/* 프로필 사진 동그랗게 */
+.profile-img-box img {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%; /* 완전 원형 */
+    object-fit: cover;
+    border: 3px solid #fff;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
+}
+
+.sidebar-title {
+    font-family: 'AbiWiseLife', sans-serif !important;
+    font-size: 1.8rem !important;
+    margin-bottom: 10px;
+    color: #333 !important;
+    -webkit-text-stroke: 0px !important; /* 기존 아웃라인 효과 제거 */
+}
+
+.sidebar-desc {
+    font-family: 'OngleipKonkon', sans-serif !important;
+    font-size: 1rem;
+    color: #666;
+    margin-bottom: 20px;
+}
+
+.sidebar-divider {
+    border: 0;
+    border-top: 1px dashed #aaa;
+    margin: 20px 0;
+}
+
+/* 메뉴 리스트 스타일 */
+.sidebar-menu h3 {
+    font-size: 1.2rem;
+    margin-bottom: 15px;
+    text-align: left;
+    padding-left: 10px;
+    border-left: 4px solid #dfa67b; /* 살구색 포인트바 */
+}
+
+.sidebar-menu ul {
+    list-style: none !important;
+    padding: 0 !important;
+    text-align: left;
+}
+
+.sidebar-menu ul li a {
+    display: block;
+    padding: 10px;
+    color: #555 !important;
+    font-size: 1.1rem;
+    border-bottom: 1px solid #eee;
+    transition: 0.3s;
+}
+
+.sidebar-menu ul li a:hover {
+    color: #dfa67b !important;
+    padding-left: 15px; /* 마우스 올리면 살짝 오른쪽으로 이동 */
+    background-color: rgba(255,255,255,0.8);
+}
+
+/* 3. [오른쪽] 본문 영역 디자인 */
+.content-area {
+    flex-grow: 1; /* 남은 공간 꽉 채우기 */
+    width: 100%; /* 모바일 대응 */
+}
+
+/* 기존 헤더(로고 등) 숨기기 (새 사이드바가 생겼으므로) */
+body > header {
+    display: none !important;
+}
+
+/* 4. 모바일 대응 (화면 작으면 위아래로 배치) */
+@media (max-width: 800px) {
+    .layout-wrapper {
+        flex-direction: column; /* 세로로 배치 */
+        padding: 20px;
+    }
+    .sidebar {
+        width: 100%; /* 사이드바 꽉 차게 */
+        margin-bottom: 30px;
+    }
+}
