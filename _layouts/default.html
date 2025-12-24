@@ -8,6 +8,87 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
+      <a id="btn-back-to-top" href="#" style="
+      display: block; 
+      position: fixed; 
+      bottom: 30px; 
+      right: 30px; 
+      width: 50px; 
+      height: 50px; 
+      background-color: #FBC02D; 
+      color: #5D4037; 
+      border-radius: 50%; 
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3); 
+      text-align: center; 
+      line-height: 50px; 
+      font-size: 24px; 
+      font-weight: bold; 
+      z-index: 2147483647; 
+      border: 2px solid #fff; 
+      text-decoration: none;">
+      ↑
+    </a>
+
+    <script>
+      // 스크롤 기능 스크립트
+      var mybutton = document.getElementById("btn-back-to-top");
+
+      // 처음엔 버튼 숨기기 (JS가 정상 작동하면 여기서 숨겨짐)
+      mybutton.style.display = "none";
+
+      window.onscroll = function() { scrollFunction() };
+
+      function scrollFunction() {
+          // 스크롤을 20px이라도 내리면 버튼 등장
+          if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+              mybutton.style.display = "block";
+          } else {
+              mybutton.style.display = "none";
+          }
+      }
+      
+      // 클릭 시 맨 위로 부드럽게 이동 (href="#" 기본 기능 보조)
+      mybutton.addEventListener("click", function(event){
+          event.preventDefault();
+          window.scrollTo({top: 0, behavior: 'smooth'});
+      });
+
+      document.addEventListener("DOMContentLoaded", function() {
+            // 본인 저장소 주소 (정확해야 함)
+            const repo = "tjswntjswn/tjswntjswn.github.io"; 
+            
+            // GitHub API로 이슈 목록(댓글)을 싹 가져옴 (최대 100개)
+            fetch(`https://api.github.com/repos/${repo}/issues?per_page=100`)
+                .then(response => response.json())
+                .then(data => {
+                    const issueMap = {};
+                    // 가져온 이슈들을 제목 기준으로 정리
+                    if (Array.isArray(data)) {
+                        data.forEach(issue => {
+                            // 이슈 제목과 댓글 수 매핑
+                            issueMap[issue.title.trim()] = issue.comments;
+                        });
+                    }
+
+                    // HTML에 있는 '댓글 박스'들을 찾아서 숫자 채워넣기
+                    document.querySelectorAll(".comment-cnt-target").forEach(el => {
+                        const title = el.getAttribute("data-title").trim();
+                        
+                        // 매칭되는 댓글이 있으면 갯수 표시, 없으면 0
+                        if (issueMap[title] !== undefined) {
+                             el.innerHTML = `💬 ${issueMap[title]}`;
+                             if (issueMap[title] > 0) el.style.fontWeight = "bold"; // 댓글 있으면 굵게
+                        } else {
+                             el.innerHTML = `💬 0`;
+                        }
+                        
+                        // 로딩 끝나면 투명도 100% (스르륵 나타나기)
+                        el.style.opacity = 1;
+                    });
+                })
+                .catch(err => console.log("댓글 로딩 실패:", err));
+        });
+    </script>
     {%include header.html%}
     <div class="container">
         {%include sidebar.html%}

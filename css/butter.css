@@ -32,14 +32,16 @@
     --border-line: #F0E6D2;    /* 테두리: 베이지 */
 }
 
-/* 초기화 */
+/* =========================================
+   3. 기본 초기화 및 레이아웃
+   ========================================= */
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
 body {
     background-color: var(--bg-body);
     color: var(--text-body);
     font-family: var(--font-body);
-    font-size: 15px; /* 요청하신 -10% 사이즈 */
+    font-size: 15px; 
     
     /* 레이아웃 세로 정렬 (Footer 하단 고정용) */
     display: flex;
@@ -47,38 +49,35 @@ body {
     min-height: 100vh;
 }
 
-/* 링크 기본 스타일 */
 a { text-decoration: none; color: inherit; }
 
-/* === 3. Header 스타일 (무적 방어 모드) === */
+/* 스크롤 부드럽게 & 헤더 가림 방지 */
+html, body {
+    scroll-behavior: smooth;
+    scroll-padding-top: 100px; /* 앵커 이동 시 헤더 높이만큼 띄움 */
+}
+
+/* =========================================
+   4. Header 스타일 (고정 및 가림 방지)
+   ========================================= */
 header {
-    background-color: #FFFFFF !important; /* 배경 절대 사수 */
+    background-color: #FFFFFF !important;
     border-bottom: 1px solid var(--border-line);
     height: 60px;
     display: flex;
     align-items: center;
     justify-content: center;
     
-    /* Sticky (상단 고정) 설정 */
+    /* Sticky (상단 고정) */
     position: sticky;
     top: 0;
-    
-    /* [핵심 1] z-index를 아주 높게 */
     z-index: 99999; 
     
-    /* [핵심 2] 하드웨어 가속 강제 적용 (그래픽 카드야, 이건 무조건 맨 위에 그려!) */
+    /* 하드웨어 가속 및 그림자 */
     transform: translate3d(0, 0, 0); 
     -webkit-transform: translate3d(0, 0, 0);
-    
-    /* [핵심 3] 그림자도 항상 위에 뜨게 */
     box-shadow: 0 2px 10px rgba(93, 64, 55, 0.03);
     width: 100%;
-}
-
-/* 혹시 모를 호버 시 배경 투명화 방지 */
-header:hover {
-    background-color: #FFFFFF !important;
-    opacity: 1 !important;
 }
 
 .header-inner {
@@ -95,13 +94,12 @@ header:hover {
     font-size: 1.4rem;
     color: var(--text-title);
     font-weight: bold;
-    /* 중요: 로고는 호버 효과를 줘도 색이 안 변하게 고정 */
     transition: opacity 0.2s; 
 }
 
 .logo:hover {
-    color: var(--text-title); /* 색상 유지 */
-    opacity: 0.7; /* 대신 투명도만 살짝 조절 (깜빡임 X) */
+    color: var(--text-title);
+    opacity: 0.7;
 }
 
 .header-nav { display: flex; gap: 20px; }
@@ -109,20 +107,17 @@ header:hover {
 .header-nav a {
     font-family: var(--font-title);
     font-size: 1rem;
-    color: var(--text-body); /* 기본색 지정 */
+    color: var(--text-body);
     transition: color 0.3s;
 }
 
-.header-nav a:hover { 
-    /* 메뉴는 마우스 올리면 진한 노랑(오렌지빛)으로 변경 */
-    color: #FBC02D; 
-}
+.header-nav a:hover { color: #FBC02D; }
 
 /* =========================================
-   4. 메인 컨테이너 (사이드바 + 본문)
+   5. 메인 레이아웃 (본문 + 사이드바)
    ========================================= */
 .container {
-    flex: 1; /* 남은 공간 차지 */
+    flex: 1;
     display: flex;
     width: 100%;
     max-width: 1200px;
@@ -130,9 +125,25 @@ header:hover {
     padding: 40px 20px;
     gap: 30px;
     align-items: flex-start;
+    position: relative;
+    z-index: 1;
 }
 
-/* === 사이드바 === */
+/* [글 상세 페이지 전용 레이아웃] */
+.post-layout {
+    display: flex;
+    gap: 30px;
+    align-items: flex-start;
+    position: relative;
+    width: 100%;
+}
+
+.post-layout .post-card {
+    flex: 1;
+    min-width: 0; /* 내용 넘침 방지 */
+}
+
+/* === 메인 사이드바 (프로필/카테고리) === */
 aside {
     width: 260px;
     flex-shrink: 0;
@@ -150,117 +161,79 @@ aside {
     border: 1px solid var(--border-line);
 }
 
-/* 프로필 이미지 틀 (동그라미) */
+/* 프로필 이미지 */
 .profile-img-wrapper {
     width: 90px;
     height: 90px;
     margin: 0 auto 15px;
     border-radius: 50%;
     border: 3px solid #fff;
-    overflow: hidden; /* 이미지가 넘치면 잘라냄 */
-    
-    /* 내부 내용 중앙 정렬 */
+    overflow: hidden;
     display: flex;
     align-items: center;
     justify-content: center;
-    /* 이미지가 없을 때 보일 기본 배경색 */
     background-color: var(--point-color);
 }
 
-/* 1. 실제 사진이 들어갔을 때 */
-.profile-img-photo {
-    width: 100%;
-    height: 100%;
-    object-fit: cover; /* 동그라미 안에 꽉 차게 조절 */
-}
+.profile-img-photo { width: 100%; height: 100%; object-fit: cover; }
+.profile-img-text { font-family: var(--font-title); font-weight: bold; color: #fff; font-size: 1.1rem; }
+.profile-name { font-family: var(--font-title); font-size: 1.1rem; color: var(--text-title); margin-bottom: 8px; }
 
-/* 2. 사진이 없을 때 나오는 텍스트 (Me) */
-.profile-img-text {
-    font-family: var(--font-title);
-    font-weight: bold;
-    color: #fff;
-    font-size: 1.1rem;
-}
-
-.profile-name {
-    font-family: var(--font-title);
-    font-size: 1.1rem;
-    color: var(--text-title);
-    margin-bottom: 8px;
-}
-
-/* === 사이드바 카테고리 (트리 구조) === */
+/* 사이드바 카테고리 */
 .category-box h3 {
     font-family: var(--font-title);
     color: var(--text-title);
-    margin-bottom: 20px; /* 간격 조금 더 넓게 */
+    margin-bottom: 20px;
     padding-bottom: 10px;
     border-bottom: 2px dashed var(--point-color);
-    font-size: 1.1rem; /* 제목도 살짝 키움 */
+    font-size: 1.1rem;
 }
 
-/* 전체 리스트 초기화 */
-.category-tree, .sub-category-list {
-    list-style: none;
-    text-align: left;
-    padding-left: 0;
-}
+.category-tree, .sub-category-list { list-style: none; text-align: left; padding-left: 0; }
 
-/* 1. 상위(부모) 카테고리 스타일 (구분선 추가됨) */
 .parent-category {
-    margin-bottom: 15px;       /* 다음 항목과 간격 */
-    padding-bottom: 15px;      /* 글자와 구분선 사이 간격 */
-    border-bottom: 2px dashed var(--point-color); /* 베이지색 점선 */
+    margin-bottom: 15px;
+    padding-bottom: 15px;
+    border-bottom: 2px dashed var(--point-color);
 }
 
-/* (중요) 마지막 카테고리 밑에는 선을 없애는 코드 */
-.parent-category:last-child {
-    border-bottom: none;
-    padding-bottom: 0;
-    margin-bottom: 0;
-}
+.parent-category:last-child { border-bottom: none; padding-bottom: 0; margin-bottom: 0; }
 
 .parent-link {
     font-family: var(--font-title);
-    font-size: 1.2rem; /* 크기 확대 */
+    font-size: 1.2rem;
     font-weight: bold;
     color: var(--text-title);
     display: block;
     padding: 8px 12px;
     border-radius: 10px;
     transition: 0.2s;
-    background-color: rgba(255, 251, 230, 0.5); /* 아주 연한 배경 추가 */
+    background-color: rgba(255, 251, 230, 0.5);
 }
 
-.parent-link:hover {
-    background-color: var(--point-color); /* 호버 시 진한 노랑 */
-    color: var(--text-title);
-}
+.parent-link:hover { background-color: var(--point-color); color: var(--text-title); }
 
-/* 2. 하위(자식) 카테고리 스타일 (확 바꿈) */
 .sub-category-list {
     margin-top: 8px;
-    padding-left: 20px; /* 들여쓰기는 유지 */
-    border-left: none;  /* 왼쪽에 있던 선 삭제 */
+    padding-left: 20px;
+    border-left: none;
     margin-left: 15px;
 }
 
 .sub-link {
-    font-family: var(--font-title); /* 상위와 동일한 귀여운 폰트 적용 */
-    font-size: 1.1rem; /* 크기 대폭 확대 */
+    font-family: var(--font-title);
+    font-size: 1.1rem;
     color: var(--text-body);
     display: block;
     padding: 6px 10px;
     border-radius: 8px;
     transition: 0.2s;
-    position: relative; /* 아이콘 위치 잡기용 */
 }
 
-/* '└' 모양 대신 귀여운 점 아이콘 추가 */
 .sub-link::before {
-    content: '●'; /* 동그라미 점 */
+    content: '●';
     font-size: 0.8rem;
-    color: var(--point-color); /* 노란색 */
+    color: var(--point-color);
     margin-right: 8px;
     position: relative;
     top: -2px;
@@ -268,34 +241,134 @@ aside {
 
 .sub-link:hover {
     color: var(--text-title);
-    background-color: var(--bg-body); /* 호버 시 연한 크림색 배경 */
-    font-weight: bold;
-    padding-left: 15px; /* 살짝 오른쪽으로 이동 효과 */
-}
-
-.category-list { list-style: none; text-align: left; padding-left: 5px; }
-.category-list li { margin-bottom: 8px; }
-.category-list a {
-    font-family: var(--font-title);
-    font-size: 1rem;
-    display: block;
-    padding: 5px 10px;
-    border-radius: 6px;
-    transition: 0.2s;
-}
-.category-list a:hover {
     background-color: var(--bg-body);
-    color: var(--text-title);
+    font-weight: bold;
+    padding-left: 15px;
 }
 
-/* === 본문 === */
-main {
-    flex-grow: 1;
+/* =========================================
+   6. 목차 (TOC) - 📌 숨김 & 초미니 버튼 버전
+   ========================================= */
+
+/* 목차 사이드바 (틀) */
+.toc-sidebar {
+    width: 240px; 
+    min-width: 240px;
+    flex-shrink: 0;
+    position: sticky;
+    top: 90px;
+    display: none; /* 모바일 숨김 */
+    transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+    
+    /* 오른쪽 끝 정렬 */
     display: flex;
     flex-direction: column;
-    gap: 25px;
+    align-items: flex-end; 
 }
 
+@media (min-width: 1200px) {
+    .toc-sidebar { display: flex; } /* flex로 유지 */
+}
+
+/* [핵심] 접혔을 때: 이모티콘도 없으니 너비를 아주 작게(45px) 줄임 */
+.toc-sidebar.collapsed {
+    width: 45px;
+    min-width: 45px;
+}
+
+/* 목차 내용 박스 (노란색) */
+.toc-container {
+    background-color: #FFFDE7;
+    border: 2px dashed var(--point-color);
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 4px 4px 0px rgba(252, 227, 138, 0.5);
+    overflow: hidden;
+    width: 100%; 
+    box-sizing: border-box;
+    transition: padding 0.3s;
+}
+
+/* 제목 + 버튼 영역 */
+.toc-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    margin-bottom: 20px;
+    white-space: nowrap; 
+    height: 24px; /* 높이 고정 (흔들림 방지) */
+}
+
+.toc-header h3 {
+    margin: 0;
+    border: none;
+    padding: 0;
+    transition: opacity 0.2s; /* 부드럽게 사라지게 */
+}
+
+/* 화살표 아이콘 */
+#toc-toggle-icon {
+    font-size: 0.8rem;
+    color: var(--point-color);
+    transition: transform 0.3s;
+    margin-left: auto;
+}
+
+.toc-header:hover #toc-toggle-icon { transform: scale(1.2); }
+
+/* 리스트 스타일 */
+.toc-container ul { margin: 0; list-style: none; padding-left: 0; }
+.toc-container li { margin-bottom: 14px; }
+
+.toc-container a {
+    text-decoration: none;
+    color: var(--text-body);
+    font-size: 0.95rem;
+    transition: 0.2s;
+    display: block;
+    line-height: 1.4;
+}
+
+.toc-container a:hover {
+    color: var(--text-title);
+    transform: translateX(3px);
+}
+
+.h3-link {
+    padding-left: 15px;
+    font-size: 0.9rem !important;
+    color: #888 !important;
+}
+
+/* === [핵심] 접혔을 때(.collapsed) 스타일 === */
+.toc-container.collapsed {
+    padding: 10px; /* 패딩 축소 */
+    padding-bottom: 10px;
+}
+
+/* 1. 이모티콘(h3) 숨기기 */
+.toc-container.collapsed h3 {
+    display: none; 
+}
+
+/* 2. 내용물 숨기기 */
+.toc-container.collapsed #toc-content { display: none; }
+.toc-container.collapsed .toc-header { margin-bottom: 0; }
+
+/* 3. 화살표 중앙 정렬 & 회전 */
+.toc-container.collapsed .toc-header {
+    justify-content: center; /* 중앙 정렬 */
+}
+
+.toc-container.collapsed #toc-toggle-icon {
+    margin-left: 0; /* 기존 auto margin 제거 */
+    transform: rotate(180deg);
+}
+
+/* =========================================
+   7. 게시글 카드 & 상세 스타일
+   ========================================= */
 .post-card {
     background: var(--bg-card);
     border-radius: 18px;
@@ -304,50 +377,143 @@ main {
     border: 1px solid var(--border-line);
     transition: transform 0.2s;
 }
-.post-card:hover {
-    transform: translateY(-3px);
-    border-color: var(--point-color);
+.post-card:hover { transform: translateY(-3px); border-color: var(--point-color); }
+
+/* 상세 헤더 리뉴얼 (중앙 정렬, 메타 정보 상단 이동) */
+.post-header {
+    flex-direction: column !important;
+    justify-content: center;
+    padding-top: 30px;
+    padding-bottom: 30px;
+    height: auto !important;
+    min-height: 150px;
 }
 
-.post-title {
-    font-family: var(--font-title);
-    font-size: 1.4rem;
-    color: var(--text-title);
-    margin-bottom: 8px;
+.post-meta-top {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 15px;
+    font-family: var(--font-body);
+    font-size: 0.95rem;
+    color: #888;
 }
 
-.post-date {
-    font-size: 0.85rem;
-    color: #999;
-    margin-bottom: 18px;
-    display: block;
-}
-
-.post-content {
-    font-size: 1.1rem;
-    line-height: 1.6;
-    margin-bottom: 22px;
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-}
-
-.btn-read {
-    display: inline-block;
-    background-color: var(--point-color);
-    color: var(--text-title);
-    padding: 9px 22px;
-    border-radius: 30px;
-    font-family: var(--font-title);
+.title-category {
+    color: var(--point-hover);
     font-weight: bold;
     font-size: 1rem;
-    transition: 0.3s;
+    margin: 0;
 }
-.btn-read:hover { background-color: var(--point-hover); }
+
+.meta-divider { color: #ddd; font-size: 0.8rem; }
+
+.post-title-detail {
+    font-size: 2rem;
+    margin: 0;
+    line-height: 1.3;
+    text-align: center;
+    word-break: keep-all;
+}
+
+.post-date-detail { font-size: 0.95rem; color: #999; font-weight: normal; }
+
+/* 본문 스타일 */
+.post-body {
+    font-family: var(--font-body);
+    font-size: 1.15rem;
+    line-height: 1.8;
+    color: var(--text-body);
+    word-break: break-all;
+}
+
+.post-body h2 {
+    font-family: var(--font-title);
+    font-size: 1.3rem;
+    color: var(--text-title);
+    margin-top: 40px;
+    margin-bottom: 20px;
+    border-bottom: 2px solid var(--point-color);
+    padding-bottom: 5px;
+    display: inline-block;
+}
+
+.post-body h3 {
+    font-family: var(--font-title);
+    font-size: 1.1rem;
+    color: var(--text-title);
+    margin-top: 30px;
+    margin-bottom: 15px;
+    border-left: 5px solid var(--point-color);
+    padding-left: 10px;
+}
+
+.post-body img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 10px;
+    margin: 20px 0;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+
+.post-body blockquote {
+    background-color: var(--bg-body);
+    border-left: 5px solid var(--point-color);
+    margin: 20px 0;
+    padding: 15px 20px;
+    font-style: italic;
+    color: #666;
+    border-radius: 5px;
+}
+
+.post-body ul, .post-body ol { margin-bottom: 20px; padding-left: 25px; }
+.post-body li { margin-bottom: 5px; }
+
+/* 댓글 영역 */
+.comment-section { margin-top: 30px; }
 
 /* =========================================
-   5. Footer 스타일
+   8. 코드 블럭 (이중 테두리 제거)
+   ========================================= */
+.highlighter-rouge {
+    background-color: #FDFBF7;
+    border: 2px dashed var(--point-color);
+    border-radius: 15px;
+    margin: 30px 0;
+    padding: 20px;
+    box-shadow: 4px 4px 0px rgba(252, 227, 138, 0.5);
+    overflow-x: auto;
+}
+
+.highlighter-rouge div, 
+.highlighter-rouge pre, 
+.highlighter-rouge code {
+    background: none !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    overflow: visible !important;
+}
+
+.highlighter-rouge code {
+    font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: #4A4A4A;
+}
+
+p > code, li > code {
+    background-color: #FFF9C4;
+    color: #5D4037;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-family: var(--font-title);
+    font-size: 0.9em;
+}
+
+/* =========================================
+   9. Footer & 기타
    ========================================= */
 footer {
     background-color: var(--bg-card);
@@ -366,188 +532,226 @@ footer {
 
 .footer-text { font-size: 0.85rem; color: #999; }
 
+/* 맨 위로 가기 버튼 호버 효과 (HTML 인라인 스타일 보조) */
+#btn-back-to-top:hover {
+    background-color: var(--point-hover) !important;
+    transform: translateY(-5px);
+}
+
 /* =========================================
-   6. 게시글 상세 페이지 (Post Detail)
+   10. 목차 이동 시 헤더 가림 방지 (최종_진짜_해결)
    ========================================= */
 
-/* 제목 부분 */
-.post-header {
-    text-align: center;
-    margin-bottom: 20px;
-}
-
-.cat-tag {
-    display: inline-block;
-    background-color: #FFF9C4; /* 연한 노랑 뱃지 */
-    color: var(--text-title);
-    font-family: var(--font-title);
-    padding: 4px 10px;
-    border-radius: 15px;
-    font-size: 0.9rem;
-    margin-bottom: 10px;
-}
-
-.post-title-detail {
-    font-family: var(--font-title);
-    font-size: 1.6rem;
-    color: var(--text-title);
-    margin-bottom: 10px;
-    line-height: 1.3;
-}
-
-.post-date-detail {
-    font-family: var(--font-body);
-    color: #999;
-    font-size: 0.9rem;
-}
-
-.post-divider {
-    border: none;
-    border-top: 1px dashed var(--border-line);
-    margin: 20px 0 40px;
-}
-
-/* 본문 스타일 (Markdown 요소들) */
-.post-body {
-    font-family: var(--font-body);
-    font-size: 1.15rem; /* 읽기 편하게 살짝 키움 */
-    line-height: 1.8;
-    color: var(--text-main);
-    word-break: break-all;
-}
-
-/* 본문 내 제목들 (h2, h3...) */
-.post-body h2 {
-    font-family: var(--font-title);
-    font-size: 1.3rem;
-    color: var(--text-title);
-    margin-top: 40px;
-    margin-bottom: 20px;
-    border-bottom: 2px solid var(--point-color); /* 밑줄 포인트 */
-    padding-bottom: 5px;
-    display: inline-block;
-}
-
+/* 제목 위쪽에 100px짜리 '투명한 보호막'을 칩니다. */
+/* 브라우저가 이동할 때 이 보호막 위를 기준으로 멈춥니다. */
+.post-body h2, 
 .post-body h3 {
-    font-family: var(--font-title);
-    font-size: 1.1rem;
-    color: var(--text-title);
-    margin-top: 30px;
-    margin-bottom: 15px;
-    border-left: 5px solid var(--point-color); /* 왼쪽 노란 바 */
-    padding-left: 10px;
+    scroll-margin-top: 100px; /* 헤더 높이(60px) + 여유공간(40px) */
 }
 
-/* 본문 내 이미지 */
-.post-body img {
-    max-width: 100%; /* 화면 안 넘치게 */
-    height: auto;
-    border-radius: 10px;
-    margin: 20px 0;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+/* =========================================
+   11. 카테고리 목록 디자인 (너비 100% + 높이 자동 조절)
+   ========================================= */
+
+/* 1. 메인 컨테이너 확장 */
+main {
+    flex: 1;
+    width: 100% !important;
+    min-width: 0;
 }
 
-/* 본문 내 인용구 (Blockquote) */
-.post-body blockquote {
-    background-color: var(--bg-body); /* 연한 크림색 배경 */
-    border-left: 5px solid var(--point-color);
-    margin: 20px 0;
-    padding: 15px 20px;
-    font-style: italic;
-    color: #666;
-    border-radius: 5px;
+/* 2. 카테고리 구역 확장 */
+#category-view-area {
+    width: 100% !important;
+    display: block;
 }
 
-/* 본문 내 리스트 */
-.post-body ul, .post-body ol {
-    margin-bottom: 20px;
-    padding-left: 25px;
-}
-.post-body li {
-    margin-bottom: 5px;
-}
-
-/* 하단 목록 버튼 */
-.post-footer-nav {
-    margin-top: 50px;
-    text-align: center;
-    border-top: 1px solid var(--border-line);
-    padding-top: 30px;
-}
-
-.btn-list {
-    display: inline-block;
-    background-color: #fff;
+/* 3. 하얀색 큰 박스 (높이 제한 해제) */
+.category-main-card {
+    width: 100% !important; /* 가로 꽉 채움 */
+    max-width: none !important;
+    box-sizing: border-box; 
+    
+    /* [핵심] 높이 자동 조절 (글 개수에 맞춤) */
+    height: auto !important; 
+    min-height: 0 !important; /* 고정된 최소 높이 삭제 */
+    
+    background-color: var(--bg-card);
     border: 1px solid var(--border-line);
-    padding: 10px 30px;
-    border-radius: 30px;
-    color: var(--text-body);
-    font-family: var(--font-title);
-    transition: 0.2s;
+    border-radius: 18px;
+    padding: 40px;
+    box-shadow: 0 4px 12px rgba(93, 64, 55, 0.05);
+    
+    /* 내용물이 넘치면 박스가 알아서 늘어남 */
+    overflow: hidden; 
 }
 
-.btn-list:hover {
+/* 4. 헤더 (제목 + 버튼) */
+.category-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+#category-title {
+    font-family: var(--font-title);
+    font-size: 2.2rem;
+    color: var(--text-title);
+    margin-bottom: 15px;
+}
+
+#btn-show-all {
+    display: none; 
+    padding: 6px 18px;
     background-color: var(--point-color);
     color: var(--text-title);
-    border-color: var(--point-color);
+    border: none;
+    border-radius: 20px;
+    font-family: var(--font-title);
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 0.95rem;
 }
 
-/* 제목 앞 카테고리 [ ] 스타일 */
-.title-category {
-    color: var(--point-hover); /* 진한 노란색 포인트 */
-    font-size: 0.7em;          /* 제목보다는 조금 작게 (70% 크기) */
-    font-weight: normal;       /* 제목보다 덜 두껍게 */
-    margin-right: 8px;         /* 제목과 약간 띄우기 */
-    vertical-align: middle;    /* 높이 맞춤 */
+/* 5. 구분선 */
+.category-divider {
+    width: 100%;
+    height: 0;
+    border-top: 2px dashed var(--point-color);
+    margin: 30px 0 40px;
+    opacity: 0.6;
+}
+
+/* 6. 리스트 컨테이너 */
+.post-list-container {
+    padding: 0 !important;
+    margin: 0 !important;
+    list-style: none;
+    width: 100%;
+}
+
+/* 7. 개별 글 박스 */
+.post-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    
+    width: 100% !important;
+    box-sizing: border-box;
+    
+    background-color: #ffffff;
+    border: 1px solid #E0E0E0;
+    border-radius: 12px;
+    padding: 22px 30px;
+    margin-bottom: 15px;
+    
+    transition: all 0.2s;
+}
+
+.post-item:hover {
+    border-color: var(--point-color);
+    background-color: #FFFEF5;
+    transform: translateY(-2px);
+}
+
+/* 링크 영역 */
+.post-item a {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    flex: 1;
+    overflow: hidden;
+    margin-right: 20px;
+}
+
+.cat-name {
+    color: var(--point-hover);
+    font-weight: bold;
+    font-size: 1rem;
+    margin-right: 10px;
+    white-space: nowrap;
+}
+
+.post-title-text {
+    font-family: var(--font-title);
+    font-size: 1.15rem;
+    color: var(--text-title);
+    font-weight: bold;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.post-date-text {
+    font-size: 0.95rem;
+    color: #999;
+    white-space: nowrap;
+    font-family: sans-serif;
+}
+
+/* 모바일 대응 */
+@media (max-width: 768px) {
+    .category-main-card { padding: 20px; }
+    .post-item { flex-direction: column; align-items: flex-start; padding: 15px; }
+    .post-item a { width: 100%; margin-bottom: 8px; }
+    .post-date-text { align-self: flex-end; }
 }
 
 /* =========================================
-   7. 코드 블럭 (최종 수정: 이중 테두리 박멸)
+   [긴급수정] 카테고리 박스 너비 강제 확장 (Width 100%)
    ========================================= */
 
-/* 1. 가장 바깥쪽 박스 (여기에만 디자인 적용) */
-.highlighter-rouge {
-    background-color: #FDFBF7; /* 배경: 연한 아이보리 */
-    border: 2px dashed var(--point-color); /* 테두리: 노란 점선 */
-    border-radius: 15px;
-    margin: 30px 0;
-    padding: 20px; /* 안쪽 여백 */
-    box-shadow: 4px 4px 0px rgba(252, 227, 138, 0.5); /* 그림자 */
-    overflow-x: auto; /* 가로 스크롤 */
+/* 1. 메인 컨테이너가 쫄아들지 않게 강제 확장 */
+main {
+    flex: 1;           /* 남은 공간 다 내꺼 */
+    width: 100% !important; /* [핵심] 가로 사이즈 무조건 100% */
+    min-width: 0;      /* 찌그러짐 방지 */
 }
 
-/* 2. 안쪽에 생기는 모든 중간 포장지들 강제 초기화 (중요!) */
-.highlighter-rouge div, 
-.highlighter-rouge pre, 
-.highlighter-rouge code {
-    background: none !important;
-    border: none !important;
-    box-shadow: none !important;
-    padding: 0 !important;
-    margin: 0 !important;
-    overflow: visible !important; /* 스크롤은 바깥 박스에만 맡김 */
+/* 2. 카테고리 구역 전체 확장 */
+#category-view-area {
+    width: 100% !important;
+    display: block;    /* 블록 요소로 변경 */
 }
 
-/* 3. 코드 글자 스타일 */
-.highlighter-rouge code {
-    font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
-    font-size: 0.95rem;
-    line-height: 1.6;
-    color: #4A4A4A;
+/* 3. 하얀색 큰 박스 (진짜 오른쪽 끝까지 밀어버림) */
+.category-main-card {
+    width: 100% !important; /* 부모(main) 너비만큼 꽉 참 */
+    max-width: none !important; /* 너비 제한 해제 */
+    margin-right: 0 !important;
+    box-sizing: border-box; 
+    
+    /* 디자인 유지 */
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-line);
+    border-radius: 18px;
+    padding: 40px;
+    box-shadow: 0 4px 12px rgba(93, 64, 55, 0.05);
 }
 
-/* 4. 본문 중간에 낀 짧은 코드(`) 스타일 (유지) */
-p > code, li > code {
-    background-color: #FFF9C4;
-    color: #5D4037;
-    padding: 2px 6px;
-    border-radius: 4px;
-    font-family: var(--font-title);
-    font-size: 0.9em;
+/* 4. 내부 리스트 박스도 덩달아 꽉 채우기 */
+.post-item {
+    width: 100% !important;
 }
 
-/* 본문과 컨테이너는 무조건 헤더보다 아래에 위치하도록 강제 */
-.container, main, article {
-    position: relative;
-    z-index: 1; /* 헤더(99999)보다 훨씬 낮음 */
+/* =========================================
+   12. 댓글 갯수 & 리스트 우측 정렬
+   ========================================= */
+
+/* 리스트에서 날짜와 댓글을 감싸는 박스 */
+.post-meta-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 15px; /* 댓글과 날짜 사이 간격 */
+    flex-shrink: 0; /* 제목이 밀어도 줄어들지 않음 */
+    margin-left: 20px;
+}
+
+/* 댓글 갯수 스타일 */
+.comment-cnt-target {
+    font-size: 0.9rem;
+    color: var(--text-body);
+    opacity: 0; /* 처음엔 숨겼다가 스크립트로 보여줌 */
+    transition: opacity 0.5s ease;
+    white-space: nowrap;
+    font-family: sans-serif;
 }

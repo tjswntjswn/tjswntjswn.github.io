@@ -2,33 +2,49 @@
 layout: default
 ---
 
-<article class="post-card post-view">
-    <header class="post-header">
-        <h1 class="post-title-detail">
-            {% if page.categories.size > 0 %}
-                <span class="title-category">
-                    [{{ page.categories | join: ' - ' }}]
+<div class="post-layout">
+    
+    <article class="post-card">
+        <header class="post-header">
+            <div class="post-meta-top">
+                {% if page.categories.size > 0 %}
+                    <span class="title-category">
+                        [{{ page.categories | join: ' - ' }}]
+                    </span>
+                    <span class="meta-divider">|</span>
+                {% endif %}
+                
+                <span class="post-date-detail">
+                    {{ page.date | date: "%Y. %m. %d" }}
                 </span>
-            {% endif %}
-            
-            {{ page.title }}
-        </h1>
-        
-        <span class="post-date-detail">{{ page.date | date: "%Y. %m. %d" }}</span>
-    </header>
+    
+                <span class="meta-divider">|</span>
+                <span class="comment-cnt-target" data-title="{{ page.title }}" style="font-size: 0.9rem; color: #888; opacity: 0; transition: opacity 0.5s;">
+                    </span>
+            </div>
+    
+            <h1 class="post-title-detail">
+                {{ page.title }}
+            </h1>
+        </header>
 
-    <hr class="post-divider">
+        <div class="post-body">
+            {{ content }}
+        </div>
+    </article>
 
-    <div class="post-body">
-        {{ content }}
-    </div>
+    <aside class="toc-sidebar">
+        <div class="toc-container">
+            <div class="toc-header" onclick="toggleToc()">
+                <h3 style="font-size: 1.5rem;">📌</h3>
+                <span id="toc-toggle-icon">▼</span>
+            </div>
+            <div id="toc-content"></div> </div>
+    </aside>
 
-    <div class="post-footer-nav">
-        <a href="{{ '/' | relative_url }}" class="btn-list">목록으로</a>
-    </div>
+</div>
 
-</article>
-<div class="post-card" style="margin-top: 30px; padding-top: 20px;">
+<div class="post-card comment-section">
     <script src="https://utteranc.es/client.js"
         repo="tjswntjswn/tjswntjswn.github.io"
         issue-term="pathname"
@@ -37,3 +53,50 @@ layout: default
         async>
     </script>
 </div>
+
+<script>
+    // 1. 목차 접기/펼치기 기능 (수정됨: 사이드바 틀까지 같이 제어)
+    function toggleToc() {
+        // 노란 박스 제어
+        const container = document.querySelector('.toc-container');
+        container.classList.toggle('collapsed');
+        
+        // [추가됨] 투명한 사이드바 틀 제어
+        const sidebar = document.querySelector('.toc-sidebar');
+        sidebar.classList.toggle('collapsed');
+    }
+
+    // 2. 목차 자동 생성
+    document.addEventListener('DOMContentLoaded', function() {
+        var tocContainer = document.getElementById('toc-content');
+        var headings = document.querySelectorAll('.post-body h2, .post-body h3');
+        
+        // 제목이 없으면 목차 아예 숨김
+        if (headings.length === 0) {
+            if(document.querySelector('.toc-sidebar')) {
+                document.querySelector('.toc-sidebar').style.display = 'none';
+            }
+            return;
+        }
+
+        var ul = document.createElement('ul');
+
+        headings.forEach(function(heading, index) {
+            var li = document.createElement('li');
+            var a = document.createElement('a');
+            
+            if (!heading.id) {
+                heading.id = 'heading-' + index;
+            }
+
+            a.href = '#' + heading.id;
+            a.textContent = heading.innerText;
+            a.className = heading.tagName.toLowerCase() + '-link';
+
+            li.appendChild(a);
+            ul.appendChild(li);
+        });
+
+        tocContainer.appendChild(ul);
+    });
+</script>

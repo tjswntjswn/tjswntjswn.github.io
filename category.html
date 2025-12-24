@@ -4,141 +4,62 @@ title: Category
 permalink: /category/
 ---
 
-<style>
-    /* 카테고리 헤더 스타일 */
-    .category-page-header {
-        text-align: center;
-        margin-bottom: 40px;
-        padding-bottom: 20px;
-        border-bottom: 2px dashed var(--point-color);
-    }
+<div id="category-view-area">
     
-    .current-category-title {
-        font-family: var(--font-title);
-        font-size: 2rem;
-        color: var(--text-title);
-    }
+    <div class="category-main-card">
+        
+        <div class="category-header">
+            <h1 id="category-title"># All Posts</h1>
+            <button id="btn-show-all" onclick="window.location.hash='';" title="전체 보기">
+                전체 보기
+            </button>
+        </div>
 
-    /* 게시글 리스트 스타일 */
-    .post-list-container {
-        list-style: none;
-        padding: 0;
-    }
+        <div class="category-divider"></div>
 
-    .post-item {
-        display: flex; /* 가로 배치 */
-        justify-content: space-between;
-        align-items: center;
-        padding: 15px 20px;
-        margin-bottom: 15px;
-        background-color: #fff;
-        border: 1px solid var(--border-line);
-        border-radius: 15px;
-        transition: 0.3s;
-        cursor: pointer;
-    }
+        <ul class="post-list-container">
+            {% for post in site.posts %}
+            <li class="post-item" data-categories="{{ post.categories | join: ' ' }}">
+                <a href="{{ post.url | relative_url }}">
+                    {% if post.categories.size > 0 %}
+                        <span class="cat-name">[{{ post.categories | last }}]</span>
+                    {% endif %}
+                    <span class="post-title-text">{{ post.title }}</span>
+                </a>
+                
+                <div class="post-meta-wrapper">
+                    <span class="comment-cnt-target" data-title="{{ post.title }}">
+                        </span>
+                    <span class="post-date-text">{{ post.date | date: "%Y.%m.%d" }}</span>
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
 
-    .post-item:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 5px 15px rgba(252, 227, 138, 0.4);
-        border-color: var(--point-color);
-    }
-
-    /* 링크 클릭 영역 확장 */
-    .post-item a {
-        flex-grow: 1;
-        text-decoration: none;
-        color: var(--text-title);
-        font-family: var(--font-title);
-        font-size: 1.1rem;
-    }
-
-    .post-meta {
-        font-size: 0.85rem;
-        color: #999;
-        font-family: var(--font-body);
-        min-width: 100px;
-        text-align: right;
-    }
-
-    /* 숨김 처리용 클래스 */
-    .hidden {
-        display: none !important;
-    }
-
-    /* '전체 보기' 버튼 */
-    .btn-show-all {
-        display: block;
-        margin: 0 auto 30px;
-        padding: 8px 20px;
-        background-color: var(--point-color);
-        color: var(--text-title);
-        border-radius: 20px;
-        font-family: var(--font-title);
-        border: none;
-        cursor: pointer;
-        transition: 0.2s;
-    }
-    .btn-show-all:hover {
-        opacity: 0.8;
-    }
-</style>
-
-<div class="post-card">
-    
-    <div class="category-page-header">
-        <h1 class="current-category-title" id="category-title">All Posts</h1>
-        <button id="btn-show-all" class="btn-show-all" onclick="window.location.hash='';" style="display: none;">전체 보기</button>
-    </div>
-
-    <ul class="post-list-container">
-        {% for post in site.posts %}
-        <li class="post-item" data-categories="{{ post.categories | join: ' ' }}">
-            <a href="{{ post.url | relative_url }}">
-                {% if post.categories.size > 0 %}
-                    <span style="color:var(--point-hover); font-size:0.8em; margin-right:5px;">
-                        [{{ post.categories | last }}]
-                    </span>
-                {% endif %}
-                {{ post.title }}
-            </a>
-            <span class="post-meta">{{ post.date | date: "%Y.%m.%d" }}</span>
-        </li>
-        {% endfor %}
-    </ul>
-
-</div>
+    </div> </div>
 
 <script>
     function filterPosts() {
-        // 1. URL에서 #뒤의 단어 가져오기
         var hash = decodeURIComponent(window.location.hash.substring(1));
         var titleElement = document.getElementById('category-title');
         var posts = document.getElementsByClassName('post-item');
-        var btnShowAll = document.getElementById('btn-show-all'); // 버튼 요소 가져오기
+        var btnShowAll = document.getElementById('btn-show-all');
 
-        // 2. 만약 #이 없으면 "전체 보기" 모드
         if (!hash) {
-            titleElement.innerText = "All Posts";
-            
-            // 전체 보기 모드에서는 버튼 숨기기
+            titleElement.innerText = "# All Posts"; // 기본 제목
             if(btnShowAll) btnShowAll.style.display = 'none';
-
             for (var i = 0; i < posts.length; i++) {
                 posts[i].classList.remove('hidden');
             }
             return;
         }
 
-        // 3. #이 있으면 필터링 시작
+        // 캡쳐처럼 "# 기록" 형태로 표시
         titleElement.innerText = "# " + hash;
-        
-        // 필터링 모드에서는 버튼 보여주기
-        if(btnShowAll) btnShowAll.style.display = 'block';
+        if(btnShowAll) btnShowAll.style.display = 'inline-block';
 
         for (var i = 0; i < posts.length; i++) {
             var postCats = posts[i].getAttribute('data-categories');
-            
             if (postCats.includes(hash)) {
                 posts[i].classList.remove('hidden');
             } else {
@@ -150,3 +71,7 @@ permalink: /category/
     window.addEventListener('load', filterPosts);
     window.addEventListener('hashchange', filterPosts);
 </script>
+
+<style>
+    .hidden { display: none !important; }
+</style>
