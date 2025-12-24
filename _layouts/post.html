@@ -1,4 +1,39 @@
 ---
 layout: default
 ---
-{{ content }}
+
+<article class="post-card post-view">
+    <header class="post-header">
+        <h1 class="post-title-detail">
+            {% if page.categories.size > 0 %}
+                <span class="title-category">
+                    [{{ page.categories | join: ' - ' }}]
+                </span>
+            {% endif %}
+            
+            {{ page.title }}
+        </h1>
+        
+        <span class="post-date-detail">{{ page.date | date: "%Y. %m. %d" }}</span>
+    </header>
+
+    <hr class="post-divider">
+
+    <div class="post-body">
+        {{ content }}
+    </div>
+
+    <div class="post-footer-nav">
+        <a href="{{ '/' | relative_url }}" class="btn-list">목록으로</a>
+    </div>
+
+</article>
+<div class="post-card" style="margin-top: 30px; padding-top: 20px;">
+    <script src="https://utteranc.es/client.js"
+        repo="tjswntjswn/tjswntjswn.github.io"
+        issue-term="pathname"
+        theme="github-light"
+        crossorigin="anonymous"
+        async>
+    </script>
+</div>

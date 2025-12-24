@@ -25,3 +25,15 @@ transfer:
   settings: -av
   source: _site/
   destination: ~/Git/clayh53.github.com/
+
+# ===========================
+# 블로그 프로필 설정
+# ===========================
+profile:
+  # 1단계에서 넣은 이미지 파일 경로를 적으세요. (따옴표 필수)
+  # 이미지가 없으면 비워두세요 ("") -> 그러면 기본 노란색 배경에 'Me'가 뜹니다.
+  image: "/assets/img/profile.png"
+
+  # 프로필 이름과 설명을 여기서 관리할 수 있습니다.
+  name: "김망구"
+  description: "망구밍구 블로그 ( •̀ ω •́ )✧"
