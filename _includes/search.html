@@ -1,0 +1,71 @@
+<div id="search-modal" class="search-modal">
+    <div class="search-content">
+        <div class="search-header">
+            <input type="text" id="search-input" placeholder="검색어를 입력하세요 (제목, 태그...)" autocomplete="off">
+            <button onclick="closeSearch()" class="btn-close-search">✕</button>
+        </div>
+        <div id="search-results" class="search-results">
+            </div>
+    </div>
+</div>
+
+<script>
+    let posts = [];
+
+    // 1. 검색 데이터 가져오기 (처음 한 번만 로딩)
+    fetch('{{ "/search.json" | relative_url }}')
+        .then(response => response.json())
+        .then(data => { posts = data; })
+        .catch(err => console.error("검색 데이터 로딩 실패:", err));
+
+    // 2. 검색창 열기/닫기
+    function openSearch() {
+        document.getElementById('search-modal').style.display = 'flex';
+        document.getElementById('search-input').focus();
+        document.body.style.overflow = 'hidden'; // 스크롤 막기
+    }
+
+    function closeSearch() {
+        document.getElementById('search-modal').style.display = 'none';
+        document.getElementById('search-input').value = '';
+        document.getElementById('search-results').innerHTML = '';
+        document.body.style.overflow = 'auto'; // 스크롤 풀기
+    }
+
+    // 3. 실시간 검색 로직 (글자 칠 때마다 실행)
+    document.getElementById('search-input').addEventListener('keyup', function(e) {
+        const query = e.target.value.toLowerCase();
+        const resultsContainer = document.getElementById('search-results');
+        resultsContainer.innerHTML = ''; // 기존 결과 지우기
+
+        if (query.length < 1) return; // 한 글자 미만이면 검색 안 함
+
+        // 제목, 카테고리, 태그 중에서 검색어 찾기
+        const filtered = posts.filter(post => {
+            return post.title.toLowerCase().includes(query) || 
+                   post.category.toLowerCase().includes(query) ||
+                   post.tags.toLowerCase().includes(query);
+        });
+
+        // 결과 화면에 뿌리기
+        if (filtered.length > 0) {
+            filtered.forEach(post => {
+                const item = `
+                    <a href="${post.url}" class="search-item">
+                        <span class="search-date">${post.date}</span>
+                        <h3 class="search-title">${post.title}</h3>
+                        <span class="search-meta">📂 ${post.category}</span>
+                    </a>
+                `;
+                resultsContainer.innerHTML += item;
+            });
+        } else {
+            resultsContainer.innerHTML = '<p class="no-result">검색 결과가 없어요 🥲</p>';
+        }
+    });
+
+    // ESC 키 누르면 닫기
+    window.addEventListener('keydown', function(e) {
+        if (e.key === "Escape") closeSearch();
+    });
+</script>

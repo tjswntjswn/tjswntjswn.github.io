@@ -1,0 +1,38 @@
+---
+layout: default
+title: Tags
+permalink: /tags/
+---
+
+<div class="tag-cloud-container">
+    <h1 class="page-title">✧ Tag Cloud ✧</h1>
+    <div class="tag-cloud">
+        {% assign tags = site.tags | sort %}
+        {% for tag in tags %}
+        <a href="#{{ tag[0] | slugify }}" class="tag-pill">
+            <span class="tag-name">#{{ tag[0] }}</span>
+            <span class="tag-count">{{ tag[1].size }}</span>
+        </a>
+        {% endfor %}
+    </div>
+</div>
+
+<hr class="divider">
+
+<div class="tag-list-container">
+    {% for tag in tags %}
+    <div id="{{ tag[0] | slugify }}" class="tag-section">
+        <h2 class="tag-section-title">
+            <i class="fas fa-tag"></i> {{ tag[0] }}
+        </h2>
+        <ul class="tag-post-list">
+            {% for post in tag[1] %}
+            <li>
+                <span class="post-date-simple">{{ post.date | date: "%Y.%m.%d" }}</span>
+                <a href="{{ post.url | relative_url }}" class="post-link-simple">{{ post.title }}</a>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endfor %}
+</div>

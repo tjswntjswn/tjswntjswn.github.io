@@ -22,7 +22,48 @@ layout: default
             </header>
 
             <div class="post-body">{{content}}</div>
+
+            <div class="post-interaction">
+                <button id="btn-like" class="btn-like" onclick="fireConfetti()">
+                    <span class="icon">💖</span> <span id="like-text">응원하기</span>
+                </button>
+                <button class="btn-share" onclick="copyLink()">
+                    <span class="icon">🔗</span> 공유하기
+                </button>
+            </div>
         </article>
+
+        <div id="toast-msg">주소가 복사되었습니다! 📋</div>
+
+        <div class="related-posts-area">
+            <h3 class="related-title-label">이 글도 읽어보세요 🍯</h3>
+            <div class="related-list">
+                {% assign maxRelated = 3 %}
+                {% assign count = 0 %}
+                
+                {% for post in site.posts %}
+                    {% if post.url == page.url %}{% continue %}{% endif %}
+                    {% if post.categories[0] == page.categories[0] %}
+                        <a href="{{ post.url | relative_url }}" class="related-card">
+                            <span class="related-date">{{ post.date | date: "%Y.%m.%d" }}</span>
+                            <h4 class="related-title">{{ post.title }}</h4>
+                        </a>
+                        {% assign count = count | plus: 1 %}
+                        {% if count >= maxRelated %}{% break %}{% endif %}
+                    {% endif %}
+                {% endfor %}
+
+                {% if count == 0 %}
+                    {% for post in site.posts limit:3 %}
+                        {% if post.url == page.url %}{% continue %}{% endif %}
+                        <a href="{{ post.url | relative_url }}" class="related-card">
+                            <span class="related-date">{{ post.date | date: "%Y.%m.%d" }}</span>
+                            <h4 class="related-title">{{ post.title }}</h4>
+                        </a>
+                    {% endfor %}
+                {% endif %}
+            </div>
+        </div>
 
         <div class="post-card comment-section">
             <div class="comment-header">
@@ -33,55 +74,60 @@ layout: default
         </div>
 
     </div>
+
     <aside class="toc-sidebar collapsed">
         <div class="toc-container collapsed">
             <div class="toc-header" onclick="toggleToc()">
                 <h3 style="font-size: 1.5rem;">📌</h3>
                 <span id="toc-toggle-icon">▼</span>
             </div>
-            <div id="toc-content"></div> </div>
+            <div id="toc-content"></div> 
+        </div>
     </aside>
 
 </div>
 
 <script>
-    // 1. 목차 접기/펼치기 기능
+    // 목차 및 스크롤바 기능
     function toggleToc() {
-        const container = document.querySelector('.toc-container');
-        container.classList.toggle('collapsed');
-        const sidebar = document.querySelector('.toc-sidebar');
-        sidebar.classList.toggle('collapsed');
+        document.querySelector('.toc-container').classList.toggle('collapsed');
+        document.querySelector('.toc-sidebar').classList.toggle('collapsed');
     }
 
-    // 2. 목차 자동 생성
     document.addEventListener('DOMContentLoaded', function() {
         var tocContainer = document.getElementById('toc-content');
         var headings = document.querySelectorAll('.post-body h2, .post-body h3');
         
-        if (headings.length === 0) {
-            if(document.querySelector('.toc-sidebar')) {
-                document.querySelector('.toc-sidebar').style.display = 'none';
-            }
-            return;
+        if (headings.length === 0 && document.querySelector('.toc-sidebar')) {
+            document.querySelector('.toc-sidebar').style.display = 'none';
+        } else {
+            var ul = document.createElement('ul');
+            headings.forEach(function(heading, index) {
+                var li = document.createElement('li');
+                var a = document.createElement('a');
+                if(!heading.id) heading.id = 'heading-' + index;
+                a.href = '#' + heading.id;
+                a.textContent = heading.innerText;
+                a.className = heading.tagName.toLowerCase() + '-link';
+                li.appendChild(a);
+                ul.appendChild(li);
+            });
+            tocContainer.appendChild(ul);
         }
 
-        var ul = document.createElement('ul');
-        headings.forEach(function(heading, index) {
-            var li = document.createElement('li');
-            var a = document.createElement('a');
+        if (!document.getElementById("progress-container")) {
+            var barContainer = document.createElement("div");
+            barContainer.id = "progress-container";
+            barContainer.innerHTML = '<div id="progress-bar"></div>';
+            document.body.appendChild(barContainer);
+        }
 
-            if(!heading.id) {
-                heading.id = 'heading-' + index;
-            }
-
-            a.href = '#' + heading.id;
-            a.textContent = heading.innerText;
-            a.className = heading.tagName.toLowerCase() + '-link';
-
-            li.appendChild(a);
-            ul.appendChild(li);
+        window.addEventListener('scroll', function() {
+            var winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            var height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            var scrolled = (height > 0) ? (winScroll / height) * 100 : 0;
+            var bar = document.getElementById("progress-bar");
+            if(bar) bar.style.width = scrolled + "%";
         });
-
-        tocContainer.appendChild(ul);
     });
 </script>

@@ -888,3 +888,516 @@ main {
     color: #E0E0E0;
     font-size: 0.7rem;
 }
+
+/* =========================================
+   17. 읽기 진행바 (최종)
+   ========================================= */
+   #progress-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 6px;           /* 적당한 두께 */
+    background: transparent;
+    z-index: 2147483647 !important; /* 무조건 최상단 */
+    pointer-events: none;  /* 마우스 클릭 방해 안 함 */
+}
+
+#progress-bar {
+    height: 100%;
+    background-color: #FBC02D !important; /* 버터 옐로우 */
+    width: 0%;
+    transition: width 0.1s ease-out;
+    border-radius: 0 4px 4px 0;
+    box-shadow: 0 0 10px rgba(251, 192, 45, 0.5);
+}
+
+/* =========================================
+   18. 페이지네이션 (Pagination)
+   ========================================= */
+   .pagination {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 50px;
+    margin-bottom: 20px;
+}
+
+.page-btn {
+    display: inline-block;
+    padding: 8px 16px;
+    border-radius: 20px;
+    background-color: #FFF;
+    border: 1px solid var(--border-line);
+    color: var(--text-body);
+    font-family: var(--font-title);
+    transition: all 0.2s;
+    text-decoration: none; /* 밑줄 제거 */
+}
+
+/* 마우스 올렸을 때 */
+.page-btn:hover:not(.disabled):not(.current) {
+    background-color: var(--point-color);
+    border-color: var(--point-color);
+    color: var(--text-title);
+    transform: translateY(-2px);
+}
+
+/* 현재 페이지 (활성화) */
+.page-btn.current {
+    background-color: var(--point-color);
+    border-color: var(--point-color);
+    color: var(--text-title);
+    font-weight: bold;
+    cursor: default;
+}
+
+/* 비활성화 버튼 (Prev/Next 없을 때) */
+.page-btn.disabled {
+    color: #CCC;
+    border-color: #EEE;
+    cursor: not-allowed;
+    background-color: #FAFAFA;
+}
+
+/* =========================================
+   19. 게시글 간격 수정
+   ========================================= */
+   .post-card {
+    margin-bottom: 25px !important; 
+}
+
+/* =========================================
+   20. 태그 페이지 (Tag Cloud)
+   ========================================= */
+   .tag-cloud-container {
+    text-align: center;
+    margin-bottom: 15px; /* [수정] 40px -> 15px로 확 줄임 */
+}
+
+.tag-cloud {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+/* 태그 버튼 디자인 (알약 모양) */
+.tag-pill {
+    background-color: #FFFDE7; /* 연한 노랑 */
+    border: 1px solid #FBC02D;
+    border-radius: 20px;
+    padding: 8px 16px;
+    text-decoration: none;
+    color: #5D4037;
+    font-family: var(--font-body);
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.tag-pill:hover {
+    background-color: #FBC02D;
+    color: #FFF;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(251, 192, 45, 0.3);
+}
+
+.tag-count {
+    background-color: rgba(0,0,0,0.1);
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    font-size: 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* 아래쪽 목록 디자인 */
+.tag-section {
+    margin-bottom: 40px;
+    scroll-margin-top: 100px; /* 헤더에 가려지지 않게 여백 줌 */
+}
+
+.tag-section-title {
+    font-size: 1.5rem;
+    border-bottom: 2px solid #EEE;
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+    color: #FBC02D; /* 제목 노란색 */
+}
+
+.tag-post-list {
+    list-style: none;
+    padding-left: 10px;
+}
+
+.tag-post-list li {
+    margin-bottom: 8px;
+    display: flex;
+    gap: 15px;
+}
+
+.post-date-simple {
+    color: #CCC;
+    font-size: 0.9rem;
+    min-width: 80px;
+}
+
+.post-link-simple {
+    text-decoration: none;
+    color: #555;
+    transition: color 0.2s;
+}
+
+.post-link-simple:hover {
+    color: #FBC02D;
+    font-weight: bold;
+}
+
+/* =========================================
+   21. 구분선 (라떼 브라운)
+   ========================================= */
+   .divider {
+    border: none;
+    border-top: 1px solid #5D4037; /* 글자색과 같은 진한 갈색 */
+    width: 100%;
+    
+    /* [수정] 위쪽 여백 20px, 아래쪽 여백 50px */
+    /* 위는 좁게, 아래 목록과는 떨어지게 설정 */
+    margin: 20px 0 50px 0; 
+    
+    opacity: 0.15;
+}
+/* =========================================
+   22. 실시간 검색창 (Search Modal)
+   ========================================= */
+   .search-modal {
+    display: none; /* 평소엔 숨김 */
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background-color: rgba(255, 253, 231, 0.95); /* 배경색 (불투명한 버터색) */
+    z-index: 9999999;
+    justify-content: center;
+    align-items: flex-start;
+    padding-top: 100px;
+    animation: fadeIn 0.2s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.search-content {
+    width: 90%;
+    max-width: 600px;
+}
+
+.search-header {
+    display: flex;
+    gap: 10px;
+    border-bottom: 2px solid #FBC02D;
+    padding-bottom: 10px;
+}
+
+#search-input {
+    width: 100%;
+    border: none;
+    background: transparent;
+    font-size: 1.5rem;
+    font-family: var(--font-title);
+    color: #5D4037;
+    outline: none;
+}
+
+.btn-close-search {
+    background: none;
+    border: none;
+    font-size: 2rem;
+    cursor: pointer;
+    color: #FBC02D;
+}
+
+.search-results {
+    margin-top: 20px;
+    max-height: 60vh;
+    overflow-y: auto;
+}
+
+.search-item {
+    display: block;
+    padding: 15px;
+    border-bottom: 1px dashed #DDD;
+    text-decoration: none;
+    color: #5D4037;
+    transition: background 0.2s;
+    border-radius: 8px;
+}
+
+.search-item:hover {
+    background-color: #FFF;
+    transform: translateX(5px);
+}
+
+.search-title {
+    margin: 5px 0;
+    font-size: 1.1rem;
+}
+
+.search-date, .search-meta {
+    font-size: 0.85rem;
+    color: #999;
+}
+
+.no-result {
+    text-align: center;
+    color: #AAA;
+    margin-top: 30px;
+    font-size: 1.1rem;
+}
+
+/* =========================================
+   23. 관련 글 추천 (Related Posts)
+   ========================================= */
+   .related-posts-area {
+    margin-bottom: 40px;
+    padding: 0 10px;
+}
+
+.related-title-label {
+    font-size: 1.2rem;
+    color: #5D4037;
+    margin-bottom: 20px;
+    border-left: 5px solid #FBC02D; /* 노란색 포인트 바 */
+    padding-left: 10px;
+}
+
+.related-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* 반응형 그리드 */
+    gap: 15px;
+}
+
+.related-card {
+    background-color: #FFF;
+    border: 1px solid #EEE;
+    border-radius: 12px;
+    padding: 20px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.related-card:hover {
+    transform: translateY(-5px); /* 위로 살짝 뜸 */
+    box-shadow: 0 5px 15px rgba(251, 192, 45, 0.2); /* 노란 그림자 */
+    border-color: #FBC02D;
+}
+
+.related-date {
+    font-size: 0.8rem;
+    color: #AAA;
+    margin-bottom: 8px;
+}
+
+.related-card .related-title {
+    font-size: 1rem;
+    color: #333;
+    margin: 0;
+    line-height: 1.4;
+    font-weight: bold;
+    word-break: keep-all; /* 단어 단위로 줄바꿈 */
+}
+
+/* =========================================
+   24. 커스텀 404 에러 페이지
+   ========================================= */
+   .error-page-container {
+    text-align: center;
+    padding: 100px 20px;
+    animation: fadeInUp 0.5s ease-out;
+}
+
+.error-code {
+    font-size: 8rem;
+    font-weight: 900;
+    color: #FBC02D;     /* 버터 색상 */
+    line-height: 1;
+    margin-bottom: 20px;
+    text-shadow: 4px 4px 0px #FFF9C4; /* 입체감 주는 그림자 */
+    font-family: var(--font-title);
+    letter-spacing: -5px;
+}
+
+.error-message {
+    font-size: 1.8rem;
+    color: #5D4037;
+    margin-bottom: 15px;
+}
+
+.error-desc {
+    color: #888;
+    margin-bottom: 40px;
+    line-height: 1.6;
+}
+
+.btn-go-home {
+    display: inline-block;
+    padding: 12px 30px;
+    background-color: #5D4037;
+    color: #FFF;
+    text-decoration: none;
+    border-radius: 30px;
+    font-weight: bold;
+    transition: all 0.3s;
+}
+
+.btn-go-home:hover {
+    background-color: #FBC02D;
+    color: #5D4037;
+    transform: scale(1.05);
+}
+
+/* 등장 애니메이션 */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* =========================================
+   25. 이미지 확대(Lightbox) 오류 수정
+   ========================================= */
+/* 검은색 배경을 글상자보다 위로 올림 */
+.medium-zoom-overlay {
+    z-index: 999999 !important; 
+}
+
+/* 확대된 이미지는 검은 배경보다 더 위로 (제일 높게) */
+.medium-zoom-image--opened {
+    z-index: 1000000 !important;
+    position: relative;
+}
+
+/* =========================================
+   26. 코드 복사 버튼 (Copy Button)
+   ========================================= */
+/* 코드 블럭을 감싸는 박스 (기준점) */
+div.highlighter-rouge, figure.highlight {
+    position: relative;
+}
+
+/* 복사 버튼 디자인 */
+.btn-copy-code {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background-color: #5D4037; /* 진한 갈색 */
+    color: #FBC02D;            /* 버터 노란색 글자 */
+    border: none;
+    border-radius: 4px;
+    padding: 4px 8px;
+    font-size: 0.75rem;
+    font-family: var(--font-body);
+    cursor: pointer;
+    opacity: 0.5; /* 평소엔 흐리게 */
+    transition: all 0.2s;
+    z-index: 10;
+}
+
+/* 마우스 올렸을 때 */
+.btn-copy-code:hover {
+    opacity: 1;
+    background-color: #FBC02D;
+    color: #5D4037;
+    font-weight: bold;
+}
+
+/* =========================================
+   27. 좋아요 & 공유하기 버튼 + 토스트 메시지
+   ========================================= */
+   .post-interaction {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 50px;
+    padding-top: 30px;
+    border-top: 1px dashed #EEE;
+}
+
+.btn-like, .btn-share {
+    border: none;
+    border-radius: 50px;
+    padding: 12px 25px;
+    font-size: 1rem;
+    font-family: var(--font-body);
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+/* 응원하기 버튼 (분홍) */
+.btn-like {
+    background-color: #FFEBEE;
+    color: #E91E63;
+}
+.btn-like:hover {
+    background-color: #FFCDD2;
+    transform: translateY(-3px) scale(1.05);
+}
+.btn-like:active {
+    transform: scale(0.95);
+}
+
+/* 공유하기 버튼 (회색) */
+.btn-share {
+    background-color: #F5F5F5;
+    color: #555;
+}
+.btn-share:hover {
+    background-color: #EEE;
+    transform: translateY(-3px);
+}
+
+/* 토스트 메시지 (알림창) */
+#toast-msg {
+    visibility: hidden;
+    min-width: 250px;
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    border-radius: 50px;
+    padding: 16px;
+    position: fixed;
+    z-index: 999999;
+    left: 50%;
+    bottom: 30px;
+    transform: translateX(-50%);
+    font-size: 1rem;
+    opacity: 0;
+    transition: opacity 0.3s, bottom 0.3s;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+#toast-msg.show {
+    visibility: visible;
+    opacity: 1;
+    bottom: 50px; /* 살짝 위로 올라오면서 등장 */
+}

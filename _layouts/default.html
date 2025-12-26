@@ -1,141 +1,144 @@
 <!DOCTYPE html>
 <html lang="ko">
-    <head>
-        {%if site.google_analytics%}
-        <script async src="https://www.googletagmanager.com/gtag/js?id={{site.google_analytics}}"></script>
-        <script>
-          window.dataLayer=window.dataLayer||[];
-          function gtag(){dataLayer.push(arguments);}
-          gtag('js',new Date());
-          gtag('config','{{site.google_analytics}}');
-        </script>
-        {%endif%}
+<head>
+    {%if site.google_analytics%}
+    <script async src="https://www.googletagmanager.com/gtag/js?id={{site.google_analytics}}"></script>
+    <script>
+      window.dataLayer=window.dataLayer||[];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js',new Date());
+      gtag('config','{{site.google_analytics}}');
+    </script>
+    {%endif%}
 
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>{{page.title | default: site.title}}</title>
-        
-        <link rel="icon" type="image/png" href="{{'/assets/img/favicon.png'|relative_url}}">
-        
-        <link rel="stylesheet" href="{{'/css/butter.css'|relative_url}}">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    
-        <meta property="og:site_name" content="{{site.profile.name}}">
-        <meta property="og:type" content="{%if page.layout=='post'%}article{%else%}website{%endif%}">
-        <meta property="og:title" content="{{page.title|default:site.title}}">
-        <meta property="og:url" content="{{page.url|absolute_url}}">
-        <meta property="og:description" content="{{page.excerpt|default:site.profile.description|strip_html|strip_newlines|truncate:160}}">
-    
-        {%assign og_image = site.profile.image|absolute_url%}
-        {%if page.image%}
-          {%assign og_image = page.image|absolute_url%}
-        {%endif%}
-        <meta property="og:image" content="{{og_image}}">
-    
-        <meta name="twitter:card" content="summary_large_image">
-        <meta name="twitter:title" content="{{page.title|default:site.title}}">
-        <meta name="twitter:description" content="{{page.excerpt|default:site.profile.description|strip_html|truncate:160}}">
-        <meta name="twitter:image" content="{{og_image}}">
-    </head>
-    <body data-p-cat="{{page.categories[0]}}" data-s-cat="{{page.categories[1]}}">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{page.title | default: site.title}}</title>
+    <link rel="icon" type="image/png" href="{{'/assets/img/favicon.png'|relative_url}}">
+    <link rel="stylesheet" href="{{'/css/butter.css'|relative_url}}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <meta property="og:site_name" content="{{site.profile.name}}">
+    <meta property="og:type" content="{%if page.layout=='post'%}article{%else%}website{%endif%}">
+    <meta property="og:title" content="{{page.title|default:site.title}}">
+    <meta property="og:url" content="{{page.url|absolute_url}}">
+    <meta property="og:description" content="{{page.excerpt|default:site.profile.description|strip_html|strip_newlines|truncate:160}}">
+    {%assign og_image = site.profile.image|absolute_url%}
+    {%if page.image%}{%assign og_image = page.image|absolute_url%}{%endif%}
+    <meta property="og:image" content="{{og_image}}">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{{page.title|default:site.title}}">
+    <meta name="twitter:description" content="{{page.excerpt|default:site.profile.description|strip_html|truncate:160}}">
+    <meta name="twitter:image" content="{{og_image}}">
+
+    <style>
+        html.filtering-mode body { opacity: 0; visibility: hidden; }
+        body { transition: opacity 0.2s ease-in-out; opacity: 1; visibility: visible; }
+    </style>
+    <script>
+        if (window.location.hash && window.location.hash.length > 1) {
+            document.documentElement.classList.add('filtering-mode');
+        }
+    </script>
+</head>
+
+<body data-p-cat="{{page.categories[0]}}" data-s-cat="{{page.categories[1]}}">
     <a id="btn-back-to-top" href="#" style="display: none; position: fixed; bottom: 30px; right: 30px; width: 50px; height: 50px; background-color: #FBC02D; color: #5D4037; border-radius: 50%; box-shadow: 0 4px 10px rgba(0,0,0,0.3); text-align: center; line-height: 50px; font-size: 24px; font-weight: bold; z-index: 2147483647; border: 2px solid #fff; text-decoration: none;">↑</a>
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/medium-zoom/dist/medium-zoom.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
     <script>
         document.addEventListener("DOMContentLoaded", function() {
+            // 이미지 확대
+            mediumZoom('.post-body img', { margin: 24, background: 'rgba(0,0,0,0.8)' });
 
-        // --- 1. 맨 위로 가기 기능 ---
-        const backToTopBtn = document.getElementById("btn-back-to-top");
-        if(backToTopBtn) {
-            window.addEventListener("scroll", function() {
-                if(window.scrollY > 200) backToTopBtn.style.display = "block";
-                else backToTopBtn.style.display = "none";
-            });
-            backToTopBtn.addEventListener("click", function(e) {
-                e.preventDefault();
-                window.scrollTo({top: 0, behavior: 'smooth'});
-            });
-        }
+            // 맨 위로 가기
+            const backToTopBtn = document.getElementById("btn-back-to-top");
+            if(backToTopBtn) {
+                window.addEventListener("scroll", function() {
+                    if(window.scrollY > 200) backToTopBtn.style.display = "block";
+                    else backToTopBtn.style.display = "none";
+                });
+                backToTopBtn.addEventListener("click", function(e) {
+                    e.preventDefault();
+                    window.scrollTo({top: 0, behavior: 'smooth'});
+                });
+            }
 
-        // --- 2. 댓글 갯수 기능 ---
-        const repo = "tjswntjswn/tjswntjswn.github.io";
-        function normalize(text) {
-            if(!text) return "";
-            return decodeURIComponent(text).replace(/\s+/g, "").replace(/\//g, "").replace(/\.html$/g, "").toLowerCase();
-        }
+            // 댓글 수
+            const repo = "tjswntjswn/tjswntjswn.github.io";
+            function normalize(text) { return text ? decodeURIComponent(text).replace(/\s+/g, "").replace(/\//g, "").replace(/\.html$/g, "").toLowerCase() : ""; }
+            fetch(`https://api.github.com/repos/${repo}/issues?per_page=100`).then(r=>r.json()).then(d=>{
+                const m={}; if(Array.isArray(d)) d.forEach(i=>m[normalize(i.title)]=i.comments);
+                document.querySelectorAll(".comment-cnt-target").forEach(e=>{
+                    const u=normalize(e.getAttribute("data-url")), t=normalize(e.getAttribute("data-title"));
+                    let c=m[u]!==undefined?m[u]:(m[t]!==undefined?m[t]:0);
+                    e.innerHTML=`💬 ${c}`; if(c>0) e.style.fontWeight="bold"; e.style.opacity=1;
+                });
+            }).catch(e=>console.log("댓글 로딩 실패:",e));
 
-        fetch(`https://api.github.com/repos/${repo}/issues?per_page=100`)
-            .then(response => response.json())
-            .then(data => {
-                const issueMap = {};
-                if(Array.isArray(data)) {
-                    data.forEach(issue => {
-                        const key = normalize(issue.title);
-                        issueMap[key] = issue.comments;
+            // 사이드바 하이라이트
+            function highlightSidebar() {
+                document.querySelectorAll('.category-tree a').forEach(a=>a.classList.remove('active-category'));
+                const h=decodeURIComponent(window.location.hash).replace('#','');
+                const p=document.body.getAttribute('data-p-cat'), s=document.body.getAttribute('data-s-cat');
+                let t = h ? h : (s ? s : p);
+                if(t) document.querySelectorAll('.category-tree a').forEach(a=>{ if(decodeURIComponent(a.getAttribute('href')).includes('#'+t)) a.classList.add('active-category'); });
+            }
+            highlightSidebar();
+            window.addEventListener('hashchange', highlightSidebar);
+
+            // 코드 복사
+            document.querySelectorAll('pre.highlight').forEach(pre=>{
+                var btn=document.createElement('button'); btn.className='btn-copy-code'; btn.textContent='Copy';
+                btn.addEventListener('click', function() {
+                    navigator.clipboard.writeText(pre.querySelector('code').innerText).then(()=>{
+                        btn.textContent='Copied! ✨'; setTimeout(()=>btn.textContent='Copy',2000);
                     });
-                }
-                document.querySelectorAll(".comment-cnt-target").forEach(el => {
-                    const urlKey = normalize(el.getAttribute("data-url"));
-                    const titleKey = normalize(el.getAttribute("data-title"));
-                    let count = 0;
-                    if(issueMap[urlKey] !== undefined) count = issueMap[urlKey];
-                    else if(issueMap[titleKey] !== undefined) count = issueMap[titleKey];
-                    
-                    el.innerHTML = `💬 ${count}`;
-                    if (count > 0) el.style.fontWeight = "bold";
-                    el.style.opacity = 1;
                 });
-            })
-            .catch(err => console.log("댓글 로딩 실패:", err));
-
-        // --- 3. 사이드바 현재 위치 하이라이트 (최종_심플_버전) ---
-        function highlightSidebar() {
-            // 1. 초기화 (모두 끄기)
-            document.querySelectorAll('.category-tree a').forEach(a => {
-                a.classList.remove('active-category');
+                if(pre.parentNode) pre.parentNode.appendChild(btn);
             });
 
-            // 2. 정보 가져오기
-            const hash = decodeURIComponent(window.location.hash).replace('#', ''); // 주소창 해시
-            const pCat = document.body.getAttribute('data-p-cat'); // 본문 상위 카테고리
-            const sCat = document.body.getAttribute('data-s-cat'); // 본문 하위 카테고리
+            // [추가] 공유하기 기능 (주소 복사 + 토스트 메시지)
+            window.copyLink = function() {
+                const url = window.location.href;
+                navigator.clipboard.writeText(url).then(function() {
+                    const toast = document.getElementById("toast-msg");
+                    if(toast) {
+                        toast.className = "show";
+                        setTimeout(function(){ toast.className = toast.className.replace("show", ""); }, 3000);
+                    }
+                }).catch(function(err) { console.error('주소 복사 실패', err); });
+            }
 
-            let target = "";
-            
-            // 3. 타겟 선정 로직 (우선순위 적용)
-            if (hash) {
-                // Case A: 메뉴를 직접 클릭했을 때 (해시값 무조건 따름)
-                target = hash;
-            } else {
-                // Case B: 게시글을 보고 있을 때 (하위 카테고리가 있으면 하위만, 없으면 상위 선택)
-                if (sCat && sCat !== "") {
-                    target = sCat; // 자식이 있으면 자식만 타겟!
-                } else if (pCat && pCat !== "") {
-                    target = pCat; // 자식이 없으면 부모 타겟!
+            // [추가] 응원하기(폭죽) 기능
+            window.fireConfetti = function(btn) {
+                // 펑! 터지는 효과
+                confetti({
+                    particleCount: 100,
+                    spread: 70,
+                    origin: { y: 0.6 },
+                    colors: ['#FBC02D', '#E91E63', '#4CAF50', '#2196F3']
+                });
+                
+                // 버튼 글자 바꾸기 (응원 감사합니다!)
+                const textSpan = document.getElementById('like-text');
+                if(textSpan) {
+                    textSpan.innerText = "감사합니다! 🥰";
+                    setTimeout(() => textSpan.innerText = "응원하기", 2000);
                 }
             }
 
-            // 4. 하나만 켜기
-            if(target) {
-                document.querySelectorAll('.category-tree a').forEach(a => {
-                    // 링크 주소가 타겟과 정확히 일치하는지 확인 (#타겟)
-                    if(decodeURIComponent(a.getAttribute('href')).includes('#' + target)) {
-                        a.classList.add('active-category');
-                    }
-                });
-            }
-        }
-
-        // 실행 트리거
-        highlightSidebar();
-        window.addEventListener('hashchange', highlightSidebar);
-
-    });
+            setTimeout(()=>document.documentElement.classList.remove('filtering-mode'),300);
+        });
     </script>
-    {%include header.html%}
+    {% include header.html %}
     <div class="container">
         {%include sidebar.html%}
         <main>{{content}}</main>
     </div>
-    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-    {%include footer.html%}
+    {% include footer.html %}
+    {% include search.html %}
 </body>
 </html>

@@ -3,13 +3,52 @@ layout: default
 title: Home
 ---
 
-{% for post in site.posts %}
-<article class="post-card">
-    <h2 class="post-title">{{ post.title }}</h2>
-    <span class="post-date">{{ post.date | date: "%Y. %m. %d" }}</span>
-    <p class="post-content">
-        {{ post.excerpt | strip_html | truncatewords: 30 }}
-    </p>
-    <a href="{{ post.url | relative_url }}" class="btn-read">더 읽기</a>
-</article>
-{% endfor %}
+<div class="posts-container">
+    {% for post in paginator.posts %}
+    <article class="post-card">
+        <header class="post-header">
+            <h2 class="post-title">
+                <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
+            </h2>
+            <div class="post-meta">
+                <span class="post-date">{{ post.date | date: "%Y. %m. %d" }}</span>
+                {% if post.categories.size > 0 %}
+                <span class="post-category"> | {{ post.categories | join: ', ' }}</span>
+                {% endif %}
+            </div>
+        </header>
+        <div class="post-content">
+            <p>{{ post.excerpt | strip_html | truncatewords: 30 }}</p>
+        </div>
+        <a href="{{ post.url | relative_url }}" class="btn-read">더 읽기 →</a>
+    </article>
+    {% endfor %}
+</div>
+
+{% if paginator.total_pages > 1 %}
+<div class="pagination">
+    
+    {% if paginator.previous_page %}
+        <a href="{{ paginator.previous_page_path | relative_url }}" class="page-btn prev">&laquo; Prev</a>
+    {% else %}
+        <span class="page-btn disabled">&laquo; Prev</span>
+    {% endif %}
+
+    {% for page in (1..paginator.total_pages) %}
+        {% if page == paginator.page %}
+            <span class="page-btn current">{{ page }}</span>
+        {% elsif page == 1 %}
+            <a href="{{ '/' | relative_url }}" class="page-btn">{{ page }}</a>
+        {% else %}
+            <a href="{{ site.paginate_path | relative_url | replace: ':num', page }}" class="page-btn">{{ page }}</a>
+        {% endif %}
+    {% endfor %}
+
+    {% if paginator.next_page %}
+        <a href="{{ paginator.next_page_path | relative_url }}" class="page-btn next">Next &raquo;</a>
+    {% else %}
+        <span class="page-btn disabled">Next &raquo;</span>
+    {% endif %}
+    
+</div>
+{% endif %}
