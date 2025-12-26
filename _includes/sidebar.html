@@ -2,18 +2,18 @@
     <div class="profile-box">
         <div class="profile-img-wrapper">
             {% if site.profile.image and site.profile.image != "" %}
-                <img src="{{ site.profile.image | relative_url }}" alt="프로필 사진" class="profile-img-photo">
+                <img src="{{site.profile.image | relative_url}}" alt="프로필 사진" class="profile-img-photo">
             {% else %}
                 <div class="profile-img-text">Me</div>
             {% endif %}
         </div>
-        <h2 class="profile-name">{{ site.profile.name }}</h2>
-        <p class="profile-desc">{{ site.profile.description }}</p>
+        <h2 class="profile-name">{{site.profile.name}}</h2>
+        <p class="profile-desc">{{site.profile.description}}</p>
     </div>
 
     <div class="category-box">
         <h3>Category</h3>
-        
+
         {% assign main_categories = "" | split: "" %}
         {% for post in site.posts %}
             {% if post.categories.size > 0 %}
@@ -25,9 +25,7 @@
         <ul class="category-tree">
             {% for parent in main_categories %}
             <li class="parent-category">
-                <a href="{{ '/category/' | relative_url }}#{{ parent }}" class="parent-link">
-                    {{ parent }}
-                </a>
+                <a href="{{'/category/' | relative_url}}#{{parent}}" class="parent-link">{{parent}}</a>
 
                 {% assign sub_categories = "" | split: "" %}
                 {% for post in site.posts %}
@@ -41,8 +39,16 @@
                 <ul class="sub-category-list">
                     {% for sub in sub_categories %}
                     <li>
-                        <a href="{{ '/category/' | relative_url }}#{{ sub }}" class="sub-link">
-                            {{ sub }}
+                        {% assign sub_count = 0 %}
+                        {% for post in site.posts %}
+                            {% if post.categories[0] == parent and post.categories[1] == sub %}
+                                {% assign sub_count = sub_count | plus: 1 %}
+                            {% endif %}
+                        {% endfor %}
+
+                        <a href="{{'/category/' | relative_url}}#{{sub}}" class="sub-link">
+                            {{sub}}
+                            <span class="cat-count">({{sub_count}})</span>
                         </a>
                     </li>
                     {% endfor %}

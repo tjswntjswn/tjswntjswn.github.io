@@ -1,36 +1,24 @@
 ---
 layout: default
 ---
-
-<div class="post-layout">
-    
+<div class="post-layout"> 
     <article class="post-card">
         <header class="post-header">
             <div class="post-meta-top">
                 {% if page.categories.size > 0 %}
-                    <span class="title-category">
-                        [{{ page.categories | join: ' - ' }}]
-                    </span>
+                    <span class="title-category">[{{page.categories | join: ' - '}}]</span>
                     <span class="meta-divider">|</span>
                 {% endif %}
-                
-                <span class="post-date-detail">
-                    {{ page.date | date: "%Y. %m. %d" }}
-                </span>
-    
+
+                <span class="post-date-detail">{{page.date | date: "%Y. %m. %d"}}</span>
                 <span class="meta-divider">|</span>
-                <span class="comment-cnt-target" data-title="{{ page.title }}" style="font-size: 0.9rem; color: #888; opacity: 0; transition: opacity 0.5s;">
-                    </span>
+                <span class="comment-cnt-target" data-url="{{page.url}}" data-title="{{page.title | escape}}" style="font-size: 0.9rem; color: #888; opacity: 0; transition: opacity 0.5s;">💬 0</span>
             </div>
-    
-            <h1 class="post-title-detail">
-                {{ page.title }}
-            </h1>
+
+            <h1 class="post-title-detail">{{page.title}}</h1>
         </header>
 
-        <div class="post-body">
-            {{ content }}
-        </div>
+        <div class="post-body">{{content}}</div>
     </article>
 
     <aside class="toc-sidebar">
@@ -41,26 +29,16 @@ layout: default
             </div>
             <div id="toc-content"></div> </div>
     </aside>
-
 </div>
-
 <div class="post-card comment-section">
-    <script src="https://utteranc.es/client.js"
-        repo="tjswntjswn/tjswntjswn.github.io"
-        issue-term="pathname"
-        theme="github-light"
-        crossorigin="anonymous"
-        async>
-    </script>
+    <script src="https://utteranc.es/client.js" repo="tjswntjswn/tjswntjswn.github.io" issue-term="pathname" theme="github-light" crossorigin="anonymous" async></script>
 </div>
-
 <script>
     // 1. 목차 접기/펼치기 기능 (수정됨: 사이드바 틀까지 같이 제어)
     function toggleToc() {
         // 노란 박스 제어
         const container = document.querySelector('.toc-container');
         container.classList.toggle('collapsed');
-        
         // [추가됨] 투명한 사이드바 틀 제어
         const sidebar = document.querySelector('.toc-sidebar');
         sidebar.classList.toggle('collapsed');
@@ -80,12 +58,11 @@ layout: default
         }
 
         var ul = document.createElement('ul');
-
         headings.forEach(function(heading, index) {
             var li = document.createElement('li');
             var a = document.createElement('a');
-            
-            if (!heading.id) {
+
+            if(!heading.id) {
                 heading.id = 'heading-' + index;
             }
 

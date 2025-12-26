@@ -755,3 +755,17 @@ main {
     white-space: nowrap;
     font-family: sans-serif;
 }
+
+/* 카테고리 글 갯수 숫자 스타일 (기존 레이아웃 영향 없음) */
+.cat-count {
+    font-size: 0.9em;      /* 글자 크기 살짝 작게 */
+    color: #999;           /* 회색으로 처리 */
+    margin-left: 4px;      /* 이름과 숫자 사이 간격 */
+    font-weight: normal;   /* 굵기 보통 */
+}
+
+/* 마우스 올렸을 때 숫자 색상도 같이 변경 */
+.parent-link:hover .cat-count,
+.sub-link:hover .cat-count {
+    color: var(--point-color, #FCE38A); /* 기존 테마 포인트 컬러 따라가게 */
+}
