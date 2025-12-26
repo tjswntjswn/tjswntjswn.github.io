@@ -1,39 +1,27 @@
-baseurl: /tufte-jekyll
-title: Tufte-Jekyll
-subtitle: Content-centric blogging
-author: clay harmon
-simple_search: http://google.com/search
-description: A Jekyll theme for content-rich sites
-name: tufte
+# =============================================================
+# 1. 사이트 기본 설정 (여기가 틀리면 404 오류 납니다)
+# =============================================================
+title: "김망구 블로그"
+url: "https://tjswntjswn.github.io"
+baseurl: ""  # 중요: 따옴표 안에 아무것도 없어야 합니다!
+description: "망구밍구 블로그 ( •̀ ω •́ )✧"
+
+# =============================================================
+# 2. 글 주소 모양 설정 (깔끔하게 /년/월/일/제목/ 스타일)
+# =============================================================
+permalink: /:year/:month/:day/:title/
+
+# =============================================================
+# 3. 빌드 설정
+# =============================================================
 markdown: kramdown
-markdown_ext: "markdown,mkdown,mkdn,mkd,md"
-permalink: /articles/:short_year/:title
-timezone: America/New_York
-excerpt_separator: <!--more-->  # you can specify your own separator, of course.
-exclude: ['Gemfile', 'Gemfile.lock', 'Rakefile', 'UploadToGithub.Rakefile', 'README.md']
-post:
-  template: _post.txt
-  extension: md
-page:
-  template: _page.txt
-  extension: md
-editor: gvim
-git:
-  branch: master
-transfer:
-  command: rsync
-  settings: -av
-  source: _site/
-  destination: ~/Git/clayh53.github.com/
+highlighter: rouge
+exclude: ['Gemfile', 'Gemfile.lock', 'node_modules', '.sass-cache', '.jekyll-cache']
 
-# ===========================
-# 블로그 프로필 설정
-# ===========================
+# =============================================================
+# 4. 프로필 설정 (사이드바에 뜸)
+# =============================================================
 profile:
-  # 1단계에서 넣은 이미지 파일 경로를 적으세요. (따옴표 필수)
-  # 이미지가 없으면 비워두세요 ("") -> 그러면 기본 노란색 배경에 'Me'가 뜹니다.
   image: "/assets/img/profile.png"
-
-  # 프로필 이름과 설명을 여기서 관리할 수 있습니다.
   name: "김망구"
   description: "망구밍구 블로그 ( •̀ ω •́ )✧"

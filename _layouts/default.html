@@ -1,13 +1,33 @@
 <!DOCTYPE html>
 <html lang="ko">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{page.title | default: site.title}}</title>
-    <link rel="stylesheet" href="{{'/css/butter.css' | relative_url}}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-</head>
-<body>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>{{page.title | default: site.title}}</title>
+        
+        <link rel="icon" type="image/png" href="{{'/assets/img/favicon.png'|relative_url}}">
+        
+        <link rel="stylesheet" href="{{'/css/butter.css'|relative_url}}">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+        <meta property="og:site_name" content="{{site.profile.name}}">
+        <meta property="og:type" content="{%if page.layout=='post'%}article{%else%}website{%endif%}">
+        <meta property="og:title" content="{{page.title|default:site.title}}">
+        <meta property="og:url" content="{{page.url|absolute_url}}">
+        <meta property="og:description" content="{{page.excerpt|default:site.profile.description|strip_html|strip_newlines|truncate:160}}">
+    
+        {%assign og_image = site.profile.image|absolute_url%}
+        {%if page.image%}
+          {%assign og_image = page.image|absolute_url%}
+        {%endif%}
+        <meta property="og:image" content="{{og_image}}">
+    
+        <meta name="twitter:card" content="summary_large_image">
+        <meta name="twitter:title" content="{{page.title|default:site.title}}">
+        <meta name="twitter:description" content="{{page.excerpt|default:site.profile.description|strip_html|truncate:160}}">
+        <meta name="twitter:image" content="{{og_image}}">
+    </head>
+    <body data-p-cat="{{page.categories[0]}}" data-s-cat="{{page.categories[1]}}">
     <a id="btn-back-to-top" href="#" style="display: none; position: fixed; bottom: 30px; right: 30px; width: 50px; height: 50px; background-color: #FBC02D; color: #5D4037; border-radius: 50%; box-shadow: 0 4px 10px rgba(0,0,0,0.3); text-align: center; line-height: 50px; font-size: 24px; font-weight: bold; z-index: 2147483647; border: 2px solid #fff; text-decoration: none;">↑</a>
     <script>
         document.addEventListener("DOMContentLoaded", function() {
@@ -25,10 +45,8 @@
             });
         }
 
-        // --- 2. 댓글 갯수 기능 (강력 매칭 모드) ---
+        // --- 2. 댓글 갯수 기능 ---
         const repo = "tjswntjswn/tjswntjswn.github.io";
-
-        // "비교를 위해 껍데기 다 벗기는 함수" (공백, 슬래시, 특수문자 제거)
         function normalize(text) {
             if(!text) return "";
             return decodeURIComponent(text).replace(/\s+/g, "").replace(/\//g, "").replace(/\.html$/g, "").toLowerCase();
@@ -44,28 +62,64 @@
                         issueMap[key] = issue.comments;
                     });
                 }
-
                 document.querySelectorAll(".comment-cnt-target").forEach(el => {
                     const urlKey = normalize(el.getAttribute("data-url"));
                     const titleKey = normalize(el.getAttribute("data-title"));
                     let count = 0;
-
+                    if(issueMap[urlKey] !== undefined) count = issueMap[urlKey];
+                    else if(issueMap[titleKey] !== undefined) count = issueMap[titleKey];
                     
-                    if(issueMap[urlKey] !== undefined) { // 1. 주소 알맹이끼리 비교
-                        count = issueMap[urlKey];
-                    } else if(issueMap[titleKey] !== undefined) { // 2. 제목 알맹이끼리 비교 (제목으로 저장됐을 경우 대비)
-                        count = issueMap[titleKey];
-                    }
-
-                    // 결과 적용
                     el.innerHTML = `💬 ${count}`;
                     if (count > 0) el.style.fontWeight = "bold";
                     el.style.opacity = 1;
                 });
             })
             .catch(err => console.log("댓글 로딩 실패:", err));
+
+        // --- 3. 사이드바 현재 위치 하이라이트 (최종_심플_버전) ---
+        function highlightSidebar() {
+            // 1. 초기화 (모두 끄기)
+            document.querySelectorAll('.category-tree a').forEach(a => {
+                a.classList.remove('active-category');
+            });
+
+            // 2. 정보 가져오기
+            const hash = decodeURIComponent(window.location.hash).replace('#', ''); // 주소창 해시
+            const pCat = document.body.getAttribute('data-p-cat'); // 본문 상위 카테고리
+            const sCat = document.body.getAttribute('data-s-cat'); // 본문 하위 카테고리
+
+            let target = "";
+            
+            // 3. 타겟 선정 로직 (우선순위 적용)
+            if (hash) {
+                // Case A: 메뉴를 직접 클릭했을 때 (해시값 무조건 따름)
+                target = hash;
+            } else {
+                // Case B: 게시글을 보고 있을 때 (하위 카테고리가 있으면 하위만, 없으면 상위 선택)
+                if (sCat && sCat !== "") {
+                    target = sCat; // 자식이 있으면 자식만 타겟!
+                } else if (pCat && pCat !== "") {
+                    target = pCat; // 자식이 없으면 부모 타겟!
+                }
+            }
+
+            // 4. 하나만 켜기
+            if(target) {
+                document.querySelectorAll('.category-tree a').forEach(a => {
+                    // 링크 주소가 타겟과 정확히 일치하는지 확인 (#타겟)
+                    if(decodeURIComponent(a.getAttribute('href')).includes('#' + target)) {
+                        a.classList.add('active-category');
+                    }
+                });
+            }
+        }
+
+        // 실행 트리거
+        highlightSidebar();
+        window.addEventListener('hashchange', highlightSidebar);
+
     });
-</script>
+    </script>
     {%include header.html%}
     <div class="container">
         {%include sidebar.html%}
