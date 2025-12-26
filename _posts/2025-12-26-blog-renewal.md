@@ -4,7 +4,7 @@ title: "✨ Github 블로그 리뉴얼 완료! 추가된 기능들을 소개합�
 date: 2025-12-26 13:00:00 +0900
 categories: [Github, 블로그]
 tags: [jekyll, 블로그꾸미기, 기능소개, 회고]
-image: https://picsum.photos/800/400
+image: /assets/Thumbnail/2025-12-26-blog-renewal_Thumbnail.avif
 ---
 
 안녕하세요, 김망구입니다! 👋
