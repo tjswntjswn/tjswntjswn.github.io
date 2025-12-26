@@ -853,4 +853,38 @@ main {
 /* 하위 카테고리 점 색깔도 주황색으로 변경 */
 .sub-link.active-category::before {
     color: #E65100;
-}   
+}
+
+/* =========================================
+   16. 방문자 카운터 (사이드바)
+   ========================================= */
+.visit-counter-box {
+    margin-top: 15px;
+    font-family: var(--font-body); /* 숫자도 손글씨 느낌 */
+    font-size: 0.85rem;
+    color: #999; /* 은은한 회색 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    background-color: #FFFDE7; /* 아주 연한 노랑 배경 */
+    padding: 6px 12px;
+    border-radius: 20px;
+    display: inline-flex; /* 내용물만큼만 너비 차지 */
+}
+
+.visit-counter-box i {
+    color: #FBC02D; /* 아이콘은 진한 노랑 */
+    margin-right: 4px;
+    font-size: 0.8rem;
+}
+
+.counter-num {
+    font-weight: bold;
+    color: #5D4037; /* 숫자는 진한 갈색 */
+}
+
+.counter-divider {
+    color: #E0E0E0;
+    font-size: 0.7rem;
+}
