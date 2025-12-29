@@ -1,54 +1,66 @@
+<!-- 검색 모달(Search Modal) -->
 <div id="search-modal" class="search-modal">
+    <!-- 검색 영역 컨테이너 -->
     <div class="search-content">
+        <!-- 검색 입력창 + 닫기 버튼 -->
         <div class="search-header">
+            <!-- 검색어 입력 -->
             <input type="text" id="search-input" placeholder="검색어를 입력하세요 (제목, 태그...)" autocomplete="off">
+            <!-- 검색 모달 닫기 버튼 -->
             <button onclick="closeSearch()" class="btn-close-search">✕</button>
         </div>
-        <div id="search-results" class="search-results">
-            </div>
+        <!-- 검색 결과 출력 영역 -->
+        <div id="search-results" class="search-results"></div>
     </div>
 </div>
 
 <script>
+    // 전체 게시글 목록을 저장할 배열
     let posts = [];
 
-    // 1. 검색 데이터 가져오기 (처음 한 번만 로딩)
-    fetch('{{ "/search.json" | relative_url }}')
+    /* 1. 검색 데이터 로딩 (초기 1회) */
+    // search.json 파일에서 게시글 데이터 가져오기
+    fetch('{{"/search.json" | relative_url}}')
         .then(response => response.json())
-        .then(data => { posts = data; })
+        .then(data => {
+            posts = data; // 가져온 데이터를 전역 변수에 저장
+        })
         .catch(err => console.error("검색 데이터 로딩 실패:", err));
 
-    // 2. 검색창 열기/닫기
+    /* 2. 검색 모달 열기 / 닫기 */
+    // 검색 모달 열기
     function openSearch() {
         document.getElementById('search-modal').style.display = 'flex';
-        document.getElementById('search-input').focus();
-        document.body.style.overflow = 'hidden'; // 스크롤 막기
+        document.getElementById('search-input').focus(); // 입력창 포커스
+        document.body.style.overflow = 'hidden'; // 배경 스크롤 막기
     }
 
+    // 검색 모달 닫기 및 상태 초기화
     function closeSearch() {
         document.getElementById('search-modal').style.display = 'none';
-        document.getElementById('search-input').value = '';
-        document.getElementById('search-results').innerHTML = '';
-        document.body.style.overflow = 'auto'; // 스크롤 풀기
+        document.getElementById('search-input').value = ''; // 입력값 초기화
+        document.getElementById('search-results').innerHTML = ''; // 결과 초기화
+        document.body.style.overflow = 'auto'; // 배경 스크롤 복구
     }
 
-    // 3. 실시간 검색 로직 (글자 칠 때마다 실행)
+    /* 3. 실시간 검색 로직 */
+    // 입력창에서 키를 누를 때마다 실행
     document.getElementById('search-input').addEventListener('keyup', function(e) {
-        const query = e.target.value.toLowerCase();
+        const query = e.target.value.toLowerCase(); // 입력된 검색어
         const resultsContainer = document.getElementById('search-results');
-        resultsContainer.innerHTML = ''; // 기존 결과 지우기
 
-        if (query.length < 1) return; // 한 글자 미만이면 검색 안 함
+        // 이전 검색 결과 제거
+        resultsContainer.innerHTML = '';
+        // 한 글자 미만이면 검색하지 않음
+        if(query.length < 1) return;
 
-        // 제목, 카테고리, 태그 중에서 검색어 찾기
+        // 제목 / 카테고리 / 태그 중 검색어 포함 여부 확인
         const filtered = posts.filter(post => {
-            return post.title.toLowerCase().includes(query) || 
-                   post.category.toLowerCase().includes(query) ||
-                   post.tags.toLowerCase().includes(query);
+            return post.title.toLowerCase().includes(query) || post.category.toLowerCase().includes(query) || post.tags.toLowerCase().includes(query);
         });
 
-        // 결과 화면에 뿌리기
-        if (filtered.length > 0) {
+        // 검색 결과 렌더링
+        if(filtered.length > 0) {
             filtered.forEach(post => {
                 const item = `
                     <a href="${post.url}" class="search-item">
@@ -60,12 +72,16 @@
                 resultsContainer.innerHTML += item;
             });
         } else {
+            // 검색 결과 없음
             resultsContainer.innerHTML = '<p class="no-result">검색 결과가 없어요 🥲</p>';
         }
     });
 
-    // ESC 키 누르면 닫기
+    /* 4. 키보드 단축키 */
+    // ESC 키를 누르면 검색 모달 닫기
     window.addEventListener('keydown', function(e) {
-        if (e.key === "Escape") closeSearch();
+        if(e.key === "Escape") {
+            closeSearch();
+        }
     });
-</script>
+</script>    

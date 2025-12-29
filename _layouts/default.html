@@ -1,225 +1,225 @@
 <!DOCTYPE html>
 <html lang="ko">
-<head>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <style>
-        /* 1. 기본 뷰포트 설정 (폰트 뻥튀기 방지) */
-        @media screen and (max-width: 768px) {
-            
-            /* 폰트 크기 전체 축소 (약 55% 수준) */
-            html { font-size: 55%; }
-            
-            /* 가로 스크롤 방지 */
-            body { overflow-x: hidden; }
-    
-            /* 2. 헤더 정리 (메뉴 숨김, 로고/버튼 배치) */
-            .header-inner {
-                display: flex;
-                align-items: center;
-                justify-content: space-between;
-                padding: 10px 15px;
-                position: relative;
-                z-index: 50; /* 헤더는 적당히 높게 */
+    <head>
+        <!-- ✅ 모바일에서 화면 폭을 기기 폭으로 맞춤 (반응형 필수) -->
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <!-- ✅ (선택) 구글 애널리틱스: site.google_analytics 값이 있을 때만 삽입 -->
+        {%if site.google_analytics%}
+        <script async src="https://www.googletagmanager.com/gtag/js?id={{site.google_analytics}}"></script>
+        <script>
+        // GA 기본 설정
+        window.dataLayer=window.dataLayer||[];
+        function gtag() {dataLayer.push(arguments);}
+        gtag('js',new Date());
+        gtag('config','{{site.google_analytics}}');
+        </script>
+        {%endif%}
+
+        <!-- ✅ 문서 문자 인코딩 -->
+        <meta charset="UTF-8">
+
+        <!-- ✅ 페이지 타이틀: page.title 없으면 site.title 사용 -->
+        <title>{{page.title | default: site.title}}</title>
+
+        <!-- ✅ 파비콘 -->
+        <link rel="icon" type="image/png" href="{{'/assets/img/favicon.png' | relative_url}}">
+
+        <!-- ✅ Main Style -->
+        <link rel="stylesheet" href="{{'/css/main.css' | relative_url}}">
+
+        <!-- ✅ 아이콘 폰트(Font Awesome) -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+        <!-- ✅ Open Graph (카톡/페북/디스코드 공유 미리보기용) -->
+        <meta property="og:site_name" content="{{site.profile.name}}">
+        <meta property="og:type" content="{%if page.layout=='post'%}article{%else%}website{%endif%}">
+        <meta property="og:title" content="{{page.title|default:site.title}}">
+        <meta property="og:url" content="{{page.url|absolute_url}}">
+        <meta property="og:description" content="{{page.excerpt|default:site.profile.description|strip_html|strip_newlines|truncate:160}}">
+
+        <!-- ✅ OG 이미지: 기본은 프로필 이미지, 글에 page.image가 있으면 그걸 우선 -->
+        {%assign og_image = site.profile.image|absolute_url%}
+        {%if page.image%}{%assign og_image = page.image|absolute_url%}{%endif%}
+        <meta property="og:image" content="{{og_image}}">
+
+        <!-- ✅ Twitter 카드(트위터 공유 미리보기용) -->
+        <meta name="twitter:card" content="summary_large_image">
+        <meta name="twitter:title" content="{{page.title|default:site.title}}">
+        <meta name="twitter:description" content="{{page.excerpt|default:site.profile.description|strip_html|truncate:160}}">
+        <meta name="twitter:image" content="{{og_image}}">
+
+        <!-- ✅ 해시(#카테고리 등)로 진입할 때 깜빡임/레이아웃 깨짐 방지용 -->
+        <style>
+            /* filtering-mode가 붙어 있으면 잠깐 숨겼다가 */
+            html.filtering-mode body { opacity: 0; visibility: hidden; }
+            /* 0.2초 정도로 자연스럽게 나타나게 */
+            body { transition: opacity 0.2s ease-in-out; opacity: 1; visibility: visible; }
+        </style>
+        <script>
+            // URL에 #something 이 있으면 (카테고리 필터 같은 케이스)
+            // 페이지 로드 초반에 body를 잠깐 숨김 처리
+            if(window.location.hash && window.location.hash.length > 1) {
+                document.documentElement.classList.add('filtering-mode');
             }
-    
-            /* PC용 메뉴 강제 숨김 (레이아웃 파괴범 제거) */
-            .header-nav { display: none !important; }
-    
-            /* 로고 스타일 */
-            .logo {
-                font-size: 1.6rem !important;
-                white-space: nowrap;
-            }
-    
-            /* 3. [문제 해결] 사이드바 (카테고리 창) */
-            aside {
-                /* 평소엔 숨김 */
-                display: none !important;
-                
-                /* [중요] 화면 고정 */
-                position: fixed;
-                top: 0;
-                left: 0;
-                
-                /* 높이와 너비 */
-                width: 75%; 
-                height: 100vh;
-                
-                /* [핵심 1] 배경색을 흰색으로 강제! (뒤에 글자 안 비치게) */
-                background: #ffffff !important;
-                
-                /* [핵심 2] 우선순위(Layer)를 우주 끝까지 올림 */
-                z-index: 2147483647 !important; 
-                
-                /* 그림자 */
-                box-shadow: 2px 0 15px rgba(0,0,0,0.3);
-                
-                /* 스크롤 허용 및 여백 */
-                overflow-y: auto;
-                padding: 20px;
-            }
-    
-            /* 햄버거 버튼 누르면 보임 */
-            aside.active {
-                display: block !important;
-            }
-    
-            /* 4. 햄버거 버튼 스타일 */
-            .mobile-menu-btn {
-                display: block !important;
-                background: none;
-                border: none;
-                font-size: 1.8rem;
-                color: #333;
-                cursor: pointer;
-                padding: 0;
-            }
-        }
-    
-        /* PC 화면 설정 */
-        @media screen and (min-width: 769px) {
-            .mobile-menu-btn { display: none; }
-        }
-    </style>
+        </script>
+    </head>
+    <body data-p-cat="{{page.categories[0]}}" data-s-cat="{{page.categories[1]}}">
+        <!-- ✅ 맨 위로 가기 버튼 (스타일은 인라인로 박혀 있음) -->
+        <a id="btn-back-to-top" href="#" style="display: none; position: fixed; bottom: 30px; right: 30px; width: 50px; height: 50px; background-color: #FBC02D; color: #5D4037; border-radius: 50%; box-shadow: 0 4px 10px rgba(0,0,0,0.3); text-align: center; line-height: 50px; font-size: 24px; font-weight: bold; z-index: 2147483647; border: 2px solid #fff; text-decoration: none;">↑</a>
 
-    {%if site.google_analytics%}
-    <script async src="https://www.googletagmanager.com/gtag/js?id={{site.google_analytics}}"></script>
-    <script>
-      window.dataLayer=window.dataLayer||[];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js',new Date());
-      gtag('config','{{site.google_analytics}}');
-    </script>
-    {%endif%}
+        <!-- ✅ 방문자 카운터(busuanzi) 스크립트 -->
+        <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{page.title | default: site.title}}</title>
-    <link rel="icon" type="image/png" href="{{'/assets/img/favicon.png'|relative_url}}">
-    <link rel="stylesheet" href="{{'/css/butter.css'|relative_url}}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+        <!-- ✅ 이미지 확대(라이트박스) 라이브러리 -->
+        <script src="https://cdn.jsdelivr.net/npm/medium-zoom/dist/medium-zoom.min.js"></script>
 
-    <meta property="og:site_name" content="{{site.profile.name}}">
-    <meta property="og:type" content="{%if page.layout=='post'%}article{%else%}website{%endif%}">
-    <meta property="og:title" content="{{page.title|default:site.title}}">
-    <meta property="og:url" content="{{page.url|absolute_url}}">
-    <meta property="og:description" content="{{page.excerpt|default:site.profile.description|strip_html|strip_newlines|truncate:160}}">
-    {%assign og_image = site.profile.image|absolute_url%}
-    {%if page.image%}{%assign og_image = page.image|absolute_url%}{%endif%}
-    <meta property="og:image" content="{{og_image}}">
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="{{page.title|default:site.title}}">
-    <meta name="twitter:description" content="{{page.excerpt|default:site.profile.description|strip_html|truncate:160}}">
-    <meta name="twitter:image" content="{{og_image}}">
+        <!-- ✅ 폭죽/컨페티 효과 라이브러리 -->
+        <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
-    <style>
-        html.filtering-mode body { opacity: 0; visibility: hidden; }
-        body { transition: opacity 0.2s ease-in-out; opacity: 1; visibility: visible; }
-    </style>
-    <script>
-        if (window.location.hash && window.location.hash.length > 1) {
-            document.documentElement.classList.add('filtering-mode');
-        }
-    </script>
-</head>
+        <script>
+            // ✅ DOM 로딩 끝난 뒤에 기능들 초기화
+            document.addEventListener("DOMContentLoaded", function() {
+                /* 1) 이미지 확대 (medium-zoom) */
+                mediumZoom('.post-body img', {margin: 24, background: 'rgba(0,0,0,0.8)'});
 
-<body data-p-cat="{{page.categories[0]}}" data-s-cat="{{page.categories[1]}}">
-    <a id="btn-back-to-top" href="#" style="display: none; position: fixed; bottom: 30px; right: 30px; width: 50px; height: 50px; background-color: #FBC02D; color: #5D4037; border-radius: 50%; box-shadow: 0 4px 10px rgba(0,0,0,0.3); text-align: center; line-height: 50px; font-size: 24px; font-weight: bold; z-index: 2147483647; border: 2px solid #fff; text-decoration: none;">↑</a>
-    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/medium-zoom/dist/medium-zoom.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            // 이미지 확대
-            mediumZoom('.post-body img', { margin: 24, background: 'rgba(0,0,0,0.8)' });
-
-            // 맨 위로 가기
-            const backToTopBtn = document.getElementById("btn-back-to-top");
-            if(backToTopBtn) {
-                window.addEventListener("scroll", function() {
-                    if(window.scrollY > 200) backToTopBtn.style.display = "block";
-                    else backToTopBtn.style.display = "none";
-                });
-                backToTopBtn.addEventListener("click", function(e) {
-                    e.preventDefault();
-                    window.scrollTo({top: 0, behavior: 'smooth'});
-                });
-            }
-
-            // 댓글 수
-            const repo = "tjswntjswn/tjswntjswn.github.io";
-            function normalize(text) { return text ? decodeURIComponent(text).replace(/\s+/g, "").replace(/\//g, "").replace(/\.html$/g, "").toLowerCase() : ""; }
-            fetch(`https://api.github.com/repos/${repo}/issues?per_page=100`).then(r=>r.json()).then(d=>{
-                const m={}; if(Array.isArray(d)) d.forEach(i=>m[normalize(i.title)]=i.comments);
-                document.querySelectorAll(".comment-cnt-target").forEach(e=>{
-                    const u=normalize(e.getAttribute("data-url")), t=normalize(e.getAttribute("data-title"));
-                    let c=m[u]!==undefined?m[u]:(m[t]!==undefined?m[t]:0);
-                    e.innerHTML=`💬 ${c}`; if(c>0) e.style.fontWeight="bold"; e.style.opacity=1;
-                });
-            }).catch(e=>console.log("댓글 로딩 실패:",e));
-
-            // 사이드바 하이라이트
-            function highlightSidebar() {
-                document.querySelectorAll('.category-tree a').forEach(a=>a.classList.remove('active-category'));
-                const h=decodeURIComponent(window.location.hash).replace('#','');
-                const p=document.body.getAttribute('data-p-cat'), s=document.body.getAttribute('data-s-cat');
-                let t = h ? h : (s ? s : p);
-                if(t) document.querySelectorAll('.category-tree a').forEach(a=>{ if(decodeURIComponent(a.getAttribute('href')).includes('#'+t)) a.classList.add('active-category'); });
-            }
-            highlightSidebar();
-            window.addEventListener('hashchange', highlightSidebar);
-
-            // 코드 복사
-            document.querySelectorAll('pre.highlight').forEach(pre=>{
-                var btn=document.createElement('button'); btn.className='btn-copy-code'; btn.textContent='Copy';
-                btn.addEventListener('click', function() {
-                    navigator.clipboard.writeText(pre.querySelector('code').innerText).then(()=>{
-                        btn.textContent='Copied! ✨'; setTimeout(()=>btn.textContent='Copy',2000);
+                /* 2) 맨 위로 가기 버튼 - 스크롤 200px 넘어가면 표시, 클릭하면 스무스 스크롤로 top 이동 */
+                const backToTopBtn = document.getElementById("btn-back-to-top");
+                if(backToTopBtn) {
+                    window.addEventListener("scroll", function() {
+                        if(window.scrollY > 200) backToTopBtn.style.display = "block";
+                        else backToTopBtn.style.display = "none";
                     });
-                });
-                if(pre.parentNode) pre.parentNode.appendChild(btn);
-            });
-
-            // [추가] 공유하기 기능 (주소 복사 + 토스트 메시지)
-            window.copyLink = function() {
-                const url = window.location.href;
-                navigator.clipboard.writeText(url).then(function() {
-                    const toast = document.getElementById("toast-msg");
-                    if(toast) {
-                        toast.className = "show";
-                        setTimeout(function(){ toast.className = toast.className.replace("show", ""); }, 3000);
-                    }
-                }).catch(function(err) { console.error('주소 복사 실패', err); });
-            }
-
-            // [추가] 응원하기(폭죽) 기능
-            window.fireConfetti = function(btn) {
-                // 펑! 터지는 효과
-                confetti({
-                    particleCount: 100,
-                    spread: 70,
-                    origin: { y: 0.6 },
-                    colors: ['#FBC02D', '#E91E63', '#4CAF50', '#2196F3']
-                });
-                
-                // 버튼 글자 바꾸기 (응원 감사합니다!)
-                const textSpan = document.getElementById('like-text');
-                if(textSpan) {
-                    textSpan.innerText = "감사합니다! 🥰";
-                    setTimeout(() => textSpan.innerText = "응원하기", 2000);
+                    backToTopBtn.addEventListener("click", function(e) {
+                        e.preventDefault();
+                        window.scrollTo({top: 0, behavior: 'smooth'});
+                    });
                 }
-            }
 
-            setTimeout(()=>document.documentElement.classList.remove('filtering-mode'),300);
-        });
-    </script>
-    {% include header.html %}
-    <div class="container">
-        {%include sidebar.html%}
-        <main>{{content}}</main>
-    </div>
-    {% include footer.html %}
-    {% include search.html %}
-</body>
+                /* 3) 댓글 수 표시 (GitHub Issues API) - repo 이슈 목록을 가져와서 글 url/title 기반으로 매칭 후 댓글 수 출력 */
+                const repo = "tjswntjswn/tjswntjswn.github.io";
+
+                // 문자열 정규화: 공백/슬래시 제거, .html 제거, 소문자화
+                function normalize(text) {
+                    return text ? decodeURIComponent(text).replace(/\s+/g, "").replace(/\//g, "").replace(/\.html$/g, "").toLowerCase() : "";
+                }
+
+                fetch(`https://api.github.com/repos/${repo}/issues?per_page=100`)
+                    .then(r => r.json())
+                    .then(d => {
+                        // title -> comments 매핑 테이블
+                        const m = {};
+                        if(Array.isArray(d)) d.forEach(i => m[normalize(i.title)]=i.comments);
+
+                        // .comment-cnt-target 요소들에 댓글 수 주입
+                        document.querySelectorAll(".comment-cnt-target").forEach(e => {
+                            const u = normalize(e.getAttribute("data-url"));
+                            const t = normalize(e.getAttribute("data-title"));
+
+                            // url 기준 우선, 없으면 title 기준
+                            let c = m[u] !== undefined ? m[u] : (m[t] !== undefined ? m[t] : 0);
+
+                            e.innerHTML=`💬 ${c}`;
+                            if(c > 0) e.style.fontWeight = "bold";
+                            e.style.opacity = 1; // 처음엔 숨겨둔 거 표시
+                        });
+                    })
+                    .catch(e=>console.log("댓글 로딩 실패:", e));
+
+                /* 4) 사이드바 카테고리 하이라이트 - 현재 hash(#카테고리) 또는 page.categories 기반으로 해당 링크에 active-category 클래스 부여 */
+                function highlightSidebar() {
+                    // 기존 active 제거
+                    document.querySelectorAll('.category-tree a').forEach(a=>a.classList.remove('active-category'));
+
+                    // 해시(#...)가 있으면 그걸 우선 사용
+                    const h = decodeURIComponent(window.location.hash).replace('#', '');
+
+                    // 글 카테고리(부모/자식)를 body data-*에서 가져옴
+                    const p = document.body.getAttribute('data-p-cat');
+                    const s = document.body.getAttribute('data-s-cat');
+
+                    // 우선순위: hash > sub category > parent category
+                    let t = h ? h : (s ? s : p);
+
+                    // 링크 href에 '#t'가 포함되면 active 처리
+                    if(t) {
+                        document.querySelectorAll('.category-tree a').forEach(a => {
+                            if(decodeURIComponent(a.getAttribute('href')).includes('#' + t)) {
+                                a.classList.add('active-category');
+                            }
+                        });
+                    }
+                }
+                highlightSidebar();
+                window.addEventListener('hashchange', highlightSidebar);
+
+                /* 5) 코드 복사 버튼 생성 - pre.highlight마다 Copy 버튼 붙임 */
+                document.querySelectorAll('pre.highlight').forEach(pre => {
+                    var btn=document.createElement('button');
+                    btn.className='btn-copy-code';
+                    btn.textContent='Copy';
+
+                    btn.addEventListener('click', function() {
+                        navigator.clipboard.writeText(pre.querySelector('code').innerText).then(() => {
+                            btn.textContent = 'Copied! ✨';
+                            setTimeout(() => btn.textContent='Copy', 2000);
+                        });
+                    });
+
+                    // 버튼을 pre의 부모에 붙임 (레이아웃에 따라 조정 가능)
+                    if(pre.parentNode) pre.parentNode.appendChild(btn);
+                });
+
+                /* 6) 공유하기 기능(주소 복사) - window.copyLink()로 외부 버튼에서 호출 가능, 복사 성공 시 토스트(#toast-msg) 보여줌 */
+                window.copyLink = function() {
+                    const url = window.location.href;
+                    navigator.clipboard.writeText(url).then(function() {
+                        const toast = document.getElementById("toast-msg");
+                        if(toast) {
+                            toast.className = "show";
+                            setTimeout(function() {
+                                toast.className = toast.className.replace("show", "");
+                            }, 3000);
+                        }
+                    }).catch(function(err) {
+                        console.error('주소 복사 실패', err);
+                    });
+                }
+
+                /* 7) 응원하기(폭죽) 기능 - window.fireConfetti()로 호출, 폭죽 터뜨리고 버튼 텍스트 잠깐 변경 */
+                window.fireConfetti = function(btn) {
+                    confetti({
+                        particleCount: 100
+                        , spread: 70
+                        , origin: {y: 0.6}
+                        , colors: ['#FBC02D', '#E91E63', '#4CAF50', '#2196F3']
+                    });
+
+                    const textSpan = document.getElementById('like-text');
+                    if(textSpan) {
+                        textSpan.innerText = "감사합니다! 🥰";
+                        setTimeout(() => textSpan.innerText = "응원하기", 2000);
+                    }
+                }
+
+                /* 8) filtering-mode 해제 - 초반 깜빡임 방지용 숨김을 0.3초 후 제거 */
+                setTimeout(()=>document.documentElement.classList.remove('filtering-mode'), 300);
+            });
+        </script>
+
+        <!-- ✅ 헤더 include -->
+        {% include header.html %}
+
+        <!-- ✅ 메인 레이아웃: 사이드바 + 본문 -->
+        <div class="container">
+            {%include sidebar.html%}
+            <main>{{content}}</main>
+        </div>
+
+        <!-- ✅ 푸터 include -->
+        {% include footer.html %}
+
+        <!-- ✅ 검색 모달 include -->
+        {% include search.html %}
+    </body>
 </html>

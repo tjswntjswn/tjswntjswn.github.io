@@ -1,28 +1,53 @@
+<!-- Sidebar(aside) 영역 시작 - 프로필 박스 + 카테고리 트리 -->
 <aside>
+    <!-- 프로필 박스 -->
     <div class="profile-box">
+        <!-- 프로필 이미지 영역(원형) -->
         <div class="profile-img-wrapper">
+            <!-- 사이트 설정에 프로필 이미지가 있으면 이미지 출력 -->
             {% if site.profile.image and site.profile.image != "" %}
-                <img src="{{site.profile.image | relative_url}}" alt="프로필 사진" class="profile-img-photo">
+            <img src="{{site.profile.image | relative_url}}" alt="프로필 사진" class="profile-img-photo">
+            <!-- 이미지가 없으면 대체 텍스트(예: Me) 출력 -->
             {% else %}
-                <div class="profile-img-text">Me</div>
+            <div class="profile-img-text">Me</div>
             {% endif %}
         </div>
+
+        <!-- 프로필 이름 -->
         <h2 class="profile-name">{{site.profile.name}}</h2>
+
+        <!-- 프로필 소개 문구 -->
         <p class="profile-desc">{{site.profile.description}}</p>
+
+        <!-- 방문자 카운터(버수안지) -->
         <div class="visit-counter-box">
-            <span id="busuanzi_container_site_pv" style="display:none;">
-                <i class="fas fa-eye"></i> <span id="busuanzi_value_site_pv" class="counter-num"></span>
+            <!-- 페이지뷰(PV) 컨테이너: 버수안지가 로딩되면 display가 바뀌도록 사용 -->
+            <span id="busuanzi_container_site_pv" style="display: none;">
+                <i class="fas fa-eye"></i>
+                <!-- 전체 PV 값 -->
+                <span id="busuanzi_value_site_pv" class="counter-num"></span>
             </span>
+
+            <!-- PV/UV 구분선 -->
             <span class="counter-divider">|</span>
-            <span id="busuanzi_container_site_uv" style="display:none;">
-                <i class="fas fa-user"></i> <span id="busuanzi_value_site_uv" class="counter-num"></span>
+
+            <!-- 방문자수(UV) 컨테이너 -->
+            <span id="busuanzi_container_site_uv" style="display: none;">
+                <i class="fas fa-user"></i>
+                <!-- 전체 UV 값 -->
+                <span id="busuanzi_value_site_uv" class="counter-num"></span>
             </span>
         </div>
     </div>
 
+    <!-- 카테고리 박스 -->
     <div class="category-box">
         <h3>Category</h3>
-
+        <!-- -----------------------------------------
+        ==== (A) 메인 카테고리(1depth) 목록 만들기
+        ==== - 모든 글(site.posts)을 돌면서 categories[0] 수집
+        ==== - uniq + sort로 중복 제거/정렬
+        ----------------------------------------- -->
         {% assign main_categories = "" | split: "" %}
         {% for post in site.posts %}
             {% if post.categories.size > 0 %}
@@ -31,11 +56,19 @@
         {% endfor %}
         {% assign main_categories = main_categories | uniq | sort %}
 
+        <!-- 메인 카테고리 트리 출력 -->
         <ul class="category-tree">
+            <!-- 1depth 카테고리 반복 -->
             {% for parent in main_categories %}
             <li class="parent-category">
+                <!-- 상위(부모) 카테고리 링크 -->
                 <a href="{{'/category/' | relative_url}}#{{parent}}" class="parent-link">{{parent}}</a>
 
+                <!-- -----------------------------------------
+                ==== (B) 해당 parent의 서브 카테고리(2depth) 목록 만들기
+                ==== - categories[0]가 parent인 글 중 categories[1] 수집
+                ==== - uniq + sort로 중복 제거/정렬
+                ----------------------------------------- -->
                 {% assign sub_categories = "" | split: "" %}
                 {% for post in site.posts %}
                     {% if post.categories[0] == parent and post.categories.size > 1 %}
@@ -44,10 +77,16 @@
                 {% endfor %}
                 {% assign sub_categories = sub_categories | uniq | sort %}
 
+                <!-- 서브 카테고리가 있을 때만 2depth 리스트 출력 -->
                 {% if sub_categories.size > 0 %}
                 <ul class="sub-category-list">
+                    <!-- 2depth 카테고리 반복 -->
                     {% for sub in sub_categories %}
                     <li>
+                        <!-- -----------------------------------------
+                        ==== (C) 서브 카테고리 글 개수 세기
+                        ==== - parent + sub가 일치하는 글을 카운트
+                        ----------------------------------------- -->
                         {% assign sub_count = 0 %}
                         {% for post in site.posts %}
                             {% if post.categories[0] == parent and post.categories[1] == sub %}
@@ -55,10 +94,8 @@
                             {% endif %}
                         {% endfor %}
 
-                        <a href="{{'/category/' | relative_url}}#{{sub}}" class="sub-link">
-                            {{sub}}
-                            <span class="cat-count">({{sub_count}})</span>
-                        </a>
+                        <!-- 서브 카테고리 링크 + 글 개수 표시 -->
+                        <a href="{{'/category/' | relative_url}}#{{sub}}" class="sub-link">{{sub}}<span class="cat-count">({{sub_count}})</span></a>
                     </li>
                     {% endfor %}
                 </ul>
@@ -68,3 +105,4 @@
         </ul>
     </div>
 </aside>
+<!-- Sidebar(aside) 영역 끝 -->    

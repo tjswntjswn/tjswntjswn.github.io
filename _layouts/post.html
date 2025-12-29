@@ -1,36 +1,42 @@
 ---
 layout: default
 ---
-<div class="post-layout"> 
+
+<div class="post-layout">
     
     <div class="post-main-column">
         
         <article class="post-card">
+            
             <header class="post-header">
                 <div class="post-meta-top">
                     {% if page.categories.size > 0 %}
-                        <span class="title-category">[{{page.categories | join: ' - '}}]</span>
+                        <span class="title-category">[{{ page.categories | join: ' / ' }}]</span>
                         <span class="meta-divider">|</span>
                     {% endif %}
+                    <span class="post-date-detail">{{ page.date | date: "%Y년 %m월 %d일" }}</span>
+                    
+                    </div>
 
-                    <span class="post-date-detail">{{page.date | date: "%Y. %m. %d"}}</span>
-                    <span class="meta-divider">|</span>
-                    <span class="comment-cnt-target" data-url="{{page.url}}" data-title="{{page.title | escape}}" style="font-size: 0.9rem; color: #888; opacity: 0; transition: opacity 0.5s;">💬 0</span>
-                </div>
-
-                <h1 class="post-title-detail">{{page.title}}</h1>
+                <h1 class="post-title-detail">{{ page.title }}</h1>
             </header>
 
-            <div class="post-body">{{content}}</div>
+            <div class="post-body">
+                {{ content }}
+            </div>
 
             <div class="post-interaction">
                 <button id="btn-like" class="btn-like" onclick="fireConfetti()">
-                    <span class="icon">💖</span> <span id="like-text">응원하기</span>
+                    <i class="fas fa-heart" style="color: #E91E63; margin-right: 5px;"></i>
+                    <span id="like-text">응원하기</span>
                 </button>
+                
                 <button class="btn-share" onclick="copyLink()">
-                    <span class="icon">🔗</span> 공유하기
+                    <i class="fas fa-link" style="color: #555; margin-right: 5px;"></i>
+                    공유하기
                 </button>
             </div>
+
         </article>
 
         <div id="toast-msg">주소가 복사되었습니다! 📋</div>
@@ -53,13 +59,15 @@ layout: default
                     {% endif %}
                 {% endfor %}
 
-                {% if count == 0 %}
+                {% if count < maxRelated %}
                     {% for post in site.posts limit:3 %}
                         {% if post.url == page.url %}{% continue %}{% endif %}
+                        {% if count >= maxRelated %}{% break %}{% endif %}
                         <a href="{{ post.url | relative_url }}" class="related-card">
                             <span class="related-date">{{ post.date | date: "%Y.%m.%d" }}</span>
                             <h4 class="related-title">{{ post.title }}</h4>
                         </a>
+                        {% assign count = count | plus: 1 %}
                     {% endfor %}
                 {% endif %}
             </div>
@@ -70,16 +78,21 @@ layout: default
                 <h3 class="comment-title">Comments 💬</h3>
                 <p class="comment-desc">궁금한 점이나 응원의 한마디를 남겨주세요!</p>
             </div>
-            <script src="https://utteranc.es/client.js" repo="tjswntjswn/tjswntjswn.github.io" issue-term="pathname" theme="github-light" crossorigin="anonymous" async></script>
+            <script src="https://utteranc.es/client.js"
+                repo="tjswntjswn/tjswntjswn.github.io"
+                issue-term="pathname"
+                theme="github-light"
+                crossorigin="anonymous"
+                async>
+            </script>
         </div>
-
     </div>
 
-    <aside class="toc-sidebar collapsed">
-        <div class="toc-container collapsed">
+    <aside class="toc-sidebar">
+        <div class="toc-container">
             <div class="toc-header" onclick="toggleToc()">
-                <h3 style="font-size: 1.5rem;">📌</h3>
-                <span id="toc-toggle-icon">▼</span>
+                <strong style="font-family: var(--font-title);">목차</strong>
+                <i id="toc-toggle-icon" class="fas fa-chevron-down"></i>
             </div>
             <div id="toc-content"></div> 
         </div>
@@ -87,34 +100,97 @@ layout: default
 
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+
 <script>
-    // 목차 및 스크롤바 기능
+    // [1] 목차(TOC) 토글 함수
     function toggleToc() {
-        document.querySelector('.toc-container').classList.toggle('collapsed');
-        document.querySelector('.toc-sidebar').classList.toggle('collapsed');
+        const tocContainer = document.querySelector('.toc-container');
+        const tocSidebar = document.querySelector('.toc-sidebar');
+        
+        // CSS의 .collapsed 클래스를 넣었다 뺐다 함
+        tocContainer.classList.toggle('collapsed');
+        tocSidebar.classList.toggle('collapsed');
     }
 
+    // [2] 주소 복사 기능
+    function copyLink() {
+        const url = window.location.href;
+        navigator.clipboard.writeText(url).then(() => {
+            showToast("주소가 복사되었습니다! 📋");
+        }).catch(err => {
+            console.error('복사 실패:', err);
+        });
+    }
+
+    // [3] 토스트 메시지 띄우기
+    function showToast(msg) {
+        const toast = document.getElementById('toast-msg');
+        toast.innerText = msg;
+        toast.classList.add('show'); // CSS의 #toast-msg.show 가 작동
+        
+        setTimeout(() => {
+            toast.classList.remove('show');
+        }, 2000); // 2초 뒤 사라짐
+    }
+
+    // [4] 폭죽 터트리기 (응원하기 버튼)
+    function fireConfetti() {
+        var count = 200;
+        var defaults = {
+            origin: { y: 0.7 }
+        };
+
+        function fire(particleRatio, opts) {
+            confetti(Object.assign({}, defaults, opts, {
+                particleCount: Math.floor(count * particleRatio)
+            }));
+        }
+
+        fire(0.25, { spread: 26, startVelocity: 55 });
+        fire(0.2, { spread: 60 });
+        fire(0.35, { spread: 100, decay: 0.91, scalar: 0.8 });
+        fire(0.1, { spread: 120, startVelocity: 25, decay: 0.92, scalar: 1.2 });
+        fire(0.1, { spread: 120, startVelocity: 45 });
+        
+        showToast("응원 감사합니다! 💖");
+    }
+
+    // [5] 페이지 로드 후 실행 (목차 생성 & 진행바)
     document.addEventListener('DOMContentLoaded', function() {
+        
+        // --- 목차 자동 생성 ---
         var tocContainer = document.getElementById('toc-content');
         var headings = document.querySelectorAll('.post-body h2, .post-body h3');
-        
-        if (headings.length === 0 && document.querySelector('.toc-sidebar')) {
-            document.querySelector('.toc-sidebar').style.display = 'none';
+        var tocSidebar = document.querySelector('.toc-sidebar');
+
+        if (headings.length === 0) {
+            // 제목이 없으면 목차 영역 숨김
+            if(tocSidebar) tocSidebar.style.display = 'none';
         } else {
             var ul = document.createElement('ul');
             headings.forEach(function(heading, index) {
                 var li = document.createElement('li');
                 var a = document.createElement('a');
-                if(!heading.id) heading.id = 'heading-' + index;
+
+                // id가 없으면 자동 부여
+                if (!heading.id) heading.id = 'heading-' + index;
+
                 a.href = '#' + heading.id;
-                a.textContent = heading.innerText;
-                a.className = heading.tagName.toLowerCase() + '-link';
+                a.innerText = heading.innerText;
+                
+                // h3는 들여쓰기 클래스 추가 (CSS .h3-link 활용)
+                if(heading.tagName.toLowerCase() === 'h3') {
+                    a.classList.add('h3-link');
+                }
+
                 li.appendChild(a);
                 ul.appendChild(li);
             });
             tocContainer.appendChild(ul);
         }
 
+        // --- 읽기 진행바 생성 ---
         if (!document.getElementById("progress-container")) {
             var barContainer = document.createElement("div");
             barContainer.id = "progress-container";
@@ -122,12 +198,13 @@ layout: default
             document.body.appendChild(barContainer);
         }
 
+        // --- 스크롤 감지 및 진행바 업데이트 ---
         window.addEventListener('scroll', function() {
             var winScroll = document.body.scrollTop || document.documentElement.scrollTop;
             var height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
             var scrolled = (height > 0) ? (winScroll / height) * 100 : 0;
             var bar = document.getElementById("progress-bar");
-            if(bar) bar.style.width = scrolled + "%";
+            if (bar) bar.style.width = scrolled + "%";
         });
     });
 </script>
