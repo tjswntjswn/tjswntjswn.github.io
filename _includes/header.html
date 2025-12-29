@@ -1,5 +1,9 @@
 <header>
     <div class="header-inner">
+        <button class="mobile-menu-btn" onclick="toggleSidebar()">
+            <i class="fas fa-bars"></i>
+        </button>
+
         <a href="{{'/' | relative_url}}" class="logo">김 망 구 B L O G</a>
         <nav class="header-nav">
             <a href="{{'/' | relative_url}}">HOME</a>
@@ -11,3 +15,12 @@
         </nav>
     </div>
 </header>
+<script>
+    // 사이드바를 열고 닫는(토글) 함수 정의
+    function toggleSidebar() {
+        // 화면에 있는 aside 태그(사이드바)를 찾아냄
+        const sidebar = document.querySelector('aside');
+        // aside 태그에 'active' 클래스가 있으면 끄고, 없으면 켬
+        sidebar.classList.toggle('active');
+    }
+</script>

@@ -1,6 +1,87 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        /* 1. 기본 뷰포트 설정 (폰트 뻥튀기 방지) */
+        @media screen and (max-width: 768px) {
+            
+            /* 폰트 크기 전체 축소 (약 55% 수준) */
+            html { font-size: 55%; }
+            
+            /* 가로 스크롤 방지 */
+            body { overflow-x: hidden; }
+    
+            /* 2. 헤더 정리 (메뉴 숨김, 로고/버튼 배치) */
+            .header-inner {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                padding: 10px 15px;
+                position: relative;
+                z-index: 50; /* 헤더는 적당히 높게 */
+            }
+    
+            /* PC용 메뉴 강제 숨김 (레이아웃 파괴범 제거) */
+            .header-nav { display: none !important; }
+    
+            /* 로고 스타일 */
+            .logo {
+                font-size: 1.6rem !important;
+                white-space: nowrap;
+            }
+    
+            /* 3. [문제 해결] 사이드바 (카테고리 창) */
+            aside {
+                /* 평소엔 숨김 */
+                display: none !important;
+                
+                /* [중요] 화면 고정 */
+                position: fixed;
+                top: 0;
+                left: 0;
+                
+                /* 높이와 너비 */
+                width: 75%; 
+                height: 100vh;
+                
+                /* [핵심 1] 배경색을 흰색으로 강제! (뒤에 글자 안 비치게) */
+                background: #ffffff !important;
+                
+                /* [핵심 2] 우선순위(Layer)를 우주 끝까지 올림 */
+                z-index: 2147483647 !important; 
+                
+                /* 그림자 */
+                box-shadow: 2px 0 15px rgba(0,0,0,0.3);
+                
+                /* 스크롤 허용 및 여백 */
+                overflow-y: auto;
+                padding: 20px;
+            }
+    
+            /* 햄버거 버튼 누르면 보임 */
+            aside.active {
+                display: block !important;
+            }
+    
+            /* 4. 햄버거 버튼 스타일 */
+            .mobile-menu-btn {
+                display: block !important;
+                background: none;
+                border: none;
+                font-size: 1.8rem;
+                color: #333;
+                cursor: pointer;
+                padding: 0;
+            }
+        }
+    
+        /* PC 화면 설정 */
+        @media screen and (min-width: 769px) {
+            .mobile-menu-btn { display: none; }
+        }
+    </style>
+
     {%if site.google_analytics%}
     <script async src="https://www.googletagmanager.com/gtag/js?id={{site.google_analytics}}"></script>
     <script>
