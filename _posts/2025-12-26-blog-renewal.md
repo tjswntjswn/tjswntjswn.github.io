@@ -2,7 +2,7 @@
 layout: post
 title: "✨ Github 블로그 리뉴얼 완료! 추가된 기능들을 소개합니다"
 date: 2025-12-26 13:00:00 +0900
-categories: [Github, 블로그]
+categories: [Git, 블로그]
 tags: [jekyll, 블로그꾸미기, 기능소개, 회고]
 image: /assets/Thumbnail/2025-12-26-blog-renewal_Thumbnail.avif
 ---
