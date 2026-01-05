@@ -778,12 +778,25 @@ aside {
 }
 
 p > code, li > code {
-    background-color: #FFF9C4;
-    color: #5D4037;
-    padding: 2px 6px;
+    background-color: #FFF9C4 !important; /* 배경색 강제 적용 */
+    color: #5D4037 !important;
+    
+    /* 폰트 크기를 80%로 줄여서 박스가 너무 커지는 것 방지 */
+    font-size: 0.8rem !important; 
+    font-family: var(--font-title) !important;
+    font-weight: bold;
+    
+    /* 안쪽 여백을 최소한으로 줄임 */
+    padding: 2px 5px !important;
     border-radius: 4px;
-    font-family: var(--font-title);
-    font-size: 0.9em;
+    
+    /* [핵심] 블록 성질을 줘서 윗줄/아랫줄을 밀어내게 함 (겹침 방지) */
+    display: inline-block !important;
+    vertical-align: middle !important;
+    
+    /* 박스 주변에 숨 쉴 공간 확보 */
+    margin: 2px 2px !important;
+    line-height: normal !important;
 }
 
 div.highlighter-rouge, figure.highlight { position: relative; }
