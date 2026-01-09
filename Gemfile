@@ -7,7 +7,8 @@ group :jekyll_plugins do
   gem "jekyll-feed"
   gem "jekyll-seo-tag"
   gem 'jekyll-paginate'
-    gem 'rouge'
+  gem 'rouge'
+  gem "webrick"
 end
 
 # 윈도우/맥 호환성을 위해 추가
