@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "AI 네이티브 개발의 시작: 제미나이 CLI가 개발자의 강력한 무기가 되는 이유"
-date: 2026-01-10
+date: 2026-01-10 01:00:00 +0900
 categories: [AI, Development]
 tags: [Gemini, CLI, AI-Native, Agile, GenerativeAI]
 image: /assets/Thumbnail/2026-01-10-ai-native-developer-with-gemini-cli_Thumbnail.png
