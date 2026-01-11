@@ -1125,3 +1125,54 @@ footer {
 /* ============================================================================= */
 .medium-zoom-overlay { z-index: 999999 !important; }
 .medium-zoom-image--opened { z-index: 1000000 !important; position: relative; }
+
+/* ============================================================================= */
+/* 12) MARKDOWN TABLE STYLE (테이블 디자인) */
+/* ============================================================================= */
+/* 테이블 전체 틀 */
+.post-body table {
+    width: 100%;                /* 가로 꽉 채우기 */
+    border-collapse: collapse;  /* 테두리 겹치기 (깔끔하게) */
+    margin: 30px 0;             /* 위아래 여백 */
+    font-size: 0.95rem;         /* 글자 크기 적당히 */
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05); /* 살짝 그림자 */
+    border-radius: 10px;        /* 모서리 둥글게 */
+    overflow: hidden;           /* 둥근 모서리 삐져나감 방지 */
+}
+
+/* 제목 칸 (Header) 스타일 */
+.post-body th {
+    background-color: #FFF9C4;  /* 연한 노란색 배경 */
+    color: #5D4037;             /* 진한 갈색 글씨 */
+    font-weight: bold;
+    text-align: center;         /* 가운데 정렬 */
+    padding: 12px 15px;         /* 안쪽 여백 */
+    border-bottom: 2px solid #FBC02D; /* 제목 아래는 진한 노란 줄 */
+    border-right: 1px solid #F0E6D2;  /* 세로 구분선 */
+}
+
+/* 내용 칸 (Body) 스타일 */
+.post-body td {
+    padding: 12px 15px;
+    border-bottom: 1px solid #F0E6D2; /* 가로 연한 줄 */
+    border-right: 1px solid #F0E6D2;  /* 세로 연한 줄 */
+    color: var(--text-body);
+    background-color: #FFFFFF;
+}
+
+/* 표의 맨 오른쪽 세로 선은 없애기 (깔끔함) */
+.post-body th:last-child, 
+.post-body td:last-child {
+    border-right: none;
+}
+
+/* 짝수 번째 줄은 배경색을 다르게 (줄무늬 효과) */
+.post-body tr:nth-child(even) td {
+    background-color: #FFFEF5;
+}
+
+/* 마우스 올렸을 때 줄 강조 */
+.post-body tr:hover td {
+    background-color: #FFF3E0;
+    transition: background-color 0.2s;
+}
