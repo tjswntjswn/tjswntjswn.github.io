@@ -45,10 +45,10 @@ tags: [Linux, Infrastructure, Ubuntu, Server]
 ### 패키지 매니저 (APT)
 Ubuntu 계열 서버에서 소프트웨어를 설치하고 업데이트하는 표준 도구입니다.
 
-<코드 박스>
+```
 sudo apt update          # 패키지 목록 업데이트
 sudo apt install -y curl # 네트워크 테스트 도구 설치
-</코드 박스>
+```
 
 ### 관리자 권한 (Sudo)
 "SuperUser Do"의 약자로, 시스템의 핵심 설정을 변경할 때 일시적으로 권한을 획득합니다. 인프라 관리자는 최소 권한 원칙을 지키며 꼭 필요한 순간에만 sudo를 사용해야 합니다.
